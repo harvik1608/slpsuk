@@ -1,0 +1,28 @@
+{
+  "name": "slpsuk",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/harvik1608/slpsuk#readme",
+  "bugs": {
+    "url": "https://github.com/harvik1608/slpsuk/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/harvik1608/slpsuk.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "axios": "^1.12.2",
+    "ejc": "^1.0.4",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "multer": "^2.0.2"
+  }
+}
