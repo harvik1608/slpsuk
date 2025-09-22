@@ -33,6 +33,9 @@
                 font-size: 16px !important;
                 font-weight: bold !important;
             }
+            .page-btn a {
+                text-transform: uppercase;
+            }
         </style>
         <script src="/assets/js/jquery-3.7.1.min.js"></script>
     </head>
@@ -163,81 +166,21 @@
                             <li class="submenu-open">
                                 <h6 class="submenu-hdr">Main</h6>
                                 <ul id="main_menu_list">
-                                    <li>
-                                        <a href="admin/dashboard.php">
-                                            <i data-feather="box"></i><span>Dashboard</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="admin/settings.php">
-                                            <i data-feather="box"></i><span>General Settings</span>
-                                        </a>
-                                    </li>
+                                    <li><a href="/admin/dashboard"><i data-feather="box"></i><span>Dashboard</span></a></li>
                                 </ul>
                             </li>
                             <li class="submenu-open">
-                                <h6 class="submenu-hdr">Quote</h6>
+                                <h6 class="submenu-hdr">Users</h6>
                                 <ul id="main_menu_list">
-                                    <li>
-                                        <a href="admin/quote/list.php">
-                                            <i data-feather="box"></i><span>Quote List</span>
-                                        </a>
-                                    </li>
+                                    <li><a href="/admin/users"><i data-feather="box"></i><span>User List</span></a></li>
                                 </ul>
                             </li>
                             <li class="submenu-open">
-                                <h6 class="submenu-hdr">Project</h6>
+                                <h6 class="submenu-hdr">Members</h6>
                                 <ul id="main_menu_list">
-                                    <li>
-                                        <a href="admin/project/list.php">
-                                            <i data-feather="box"></i><span>Project List</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="submenu-open">
-                                <h6 class="submenu-hdr">Service</h6>
-                                <ul id="main_menu_list">
-                                    <li>
-                                        <a href="admin/service/list.php">
-                                            <i data-feather="box"></i><span>Service List</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="submenu-open">
-                                <h6 class="submenu-hdr">Product</h6>
-                                <ul id="main_menu_list">
-                                    <li>
-                                        <a href="admin/category/list.php">
-                                            <i data-feather="box"></i><span>Category List</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="admin/product/list.php">
-                                            <i data-feather="box"></i><span>Product List</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="submenu-open">
-                                <h6 class="submenu-hdr">Member</h6>
-                                <ul id="main_menu_list">
-                                    <li>
-                                        <a href="admin/member/list.php">
-                                            <i data-feather="box"></i><span>Member List</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="submenu-open">
-                                <h6 class="submenu-hdr">Feedback</h6>
-                                <ul id="main_menu_list">
-                                    <li>
-                                        <a href="admin/feedback/list.php">
-                                            <i data-feather="box"></i><span>Feedback List</span>
-                                        </a>
-                                    </li>
+                                    <li><a href="admin/quote/list.php"><i data-feather="box"></i><span>Member Request List</span></a></li>
+                                    <li><a href="admin/quote/list.php"><i data-feather="box"></i><span>Member List</span></a></li>
+                                    <li><a href="admin/quote/list.php"><i data-feather="box"></i><span>Family Member List</span></a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -270,11 +213,11 @@
                         height: "auto"
                     });
                 }
-                // $("#main_menu_list li").each(function(){
-                //     if($.trim($(this).text()) == page_title) {
-                //         $(this).addClass("active");
-                //     }
-                // });
+                $("#main_menu_list li").each(function(){
+                    if($.trim($(this).text()) == page_title) {
+                        $(this).addClass("active");
+                    }
+                });
             });
             function show_toast(msg,second = 3000)
             {

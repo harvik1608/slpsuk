@@ -6,8 +6,11 @@ const CONSTANT = require("../config/constants");
 const qs = require("qs");
 const adminController = require("../controllers/adminController");
 const dashboardController = require("../controllers/dashboardController");
+const userController = require("../controllers/userController");
 
-router.get("/admin", adminController.loginPage);
-router.post("/admin/check-admin", adminController.checkAdmin);
-router.get("/admin/dashboard", dashboardController.dashboard);
+router.get("/", adminController.loginPage);
+router.post("/check-admin", adminController.checkAdmin);
+router.get("/dashboard", dashboardController.dashboard);
+router.get("/users", userController.index);
+router.get("/users/create", userController.create);
 module.exports = router;
