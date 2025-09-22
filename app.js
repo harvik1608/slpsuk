@@ -29,7 +29,7 @@ app.use(session({
     saveUninitialized: true,
     cookie: { secure: false } // true if using HTTPS
 }));
-const adminAuthRoutes = require("./routes/admin/auth");
+const adminAuthRoutes = require("./routes/backendRoutes");
 
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));

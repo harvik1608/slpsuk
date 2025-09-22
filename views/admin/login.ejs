@@ -11,23 +11,30 @@
         <title></title>
         
         <!-- Favicon -->
-        <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+        <link rel="shortcut icon" type="image/x-icon" href="/assets/img/favicon.png">
 
         <!-- Apple Touch Icon -->
-        <link rel="apple-touch-icon" sizes="180x180" href="assets/img/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
         
         <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
         
         <!-- Fontawesome CSS -->
-        <link rel="stylesheet" href="assets/plugins/fontawesome/css/fontawesome.min.css">
-        <link rel="stylesheet" href="assets/plugins/fontawesome/css/all.min.css">
+        <link rel="stylesheet" href="/assets/plugins/fontawesome/css/fontawesome.min.css">
+        <link rel="stylesheet" href="/assets/plugins/fontawesome/css/all.min.css">
 
         <!-- Tabler Icon CSS -->
-        <link rel="stylesheet" href="assets/plugins/tabler-icons/tabler-icons.min.css">
+        <link rel="stylesheet" href="/assets/plugins/tabler-icons/tabler-icons.min.css">
+
+        <link rel="stylesheet" type="text/css" href="/assets/css/toast.css">
 
         <!-- Main CSS -->
-        <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="/assets/css/style.css">
+        <style>
+            .jq-toast-single, .jq-toast-heading {
+                font-family: "Nunito" !important;
+            }
+        </style>
     </head>
     <body class="account-page bg-white">
         <div class="main-wrapper">
@@ -35,7 +42,7 @@
                 <div class="row login-wrapper m-0">
                     <div class="col-lg-6 p-0">
                         <div class="login-content">
-                            <form id="loginForm" method="POST" action="/check-admin">
+                            <form id="loginForm" method="POST" action="/admin/check-admin">
                                 <div class="login-userset">
                                     <div class="login-userheading">
                                         <h3>SLPS - Admin Panel</h3>
@@ -81,15 +88,54 @@
                     </div>
                     <div class="col-lg-6 p-0">
                         <div class="login-img">
-                            <img src="assets/img/authentication/authentication-01.svg" alt="img">
+                            <img src="/assets/img/authentication/authentication-01.svg" alt="img">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <script src="assets/js/jquery-3.7.1.min.js"></script>
-        <script src="assets/js/feather.min.js"></script>
-        <script src="assets/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/js/script.js"></script>
+        <script src="/assets/js/jquery-3.7.1.min.js"></script>
+        <script src="/assets/js/feather.min.js"></script>
+        <script src="/assets/js/bootstrap.bundle.min.js"></script>
+        <script src="/assets/js/script.js"></script>
+        <script src="/assets/js/toast.js"></script>
+        <script>
+            $(document).ready(function(){
+                $("#loginForm").submit(function(e){
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: $("#loginForm").attr("action"),
+                        type: $("#loginForm").attr("method"),
+                        data: new FormData(this),
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        beforeSend:function(){
+                            $("#loginForm button[type=submit]").html("Checking...").attr("disabled",true);
+                        },
+                        success:function(response){
+                            if(!response.success) {
+                                show_toast(response.message);
+                                $("#loginForm button[type=submit]").html("Sign In").attr("disabled",false);
+                            } else {
+                                window.location.href = response.redirect;
+                            }
+                        }
+                    });
+                });
+            });
+            function show_toast(msg,second = 3000)
+            {
+                $.toast({
+                    heading: 'Oops!',
+                    text: msg,
+                    showHideTransition: 'fade',
+                    icon: 'error',
+                    position: 'top-right',
+                    hideAfter: second
+                });
+            }
+        </script>
     </body>
 </html>
