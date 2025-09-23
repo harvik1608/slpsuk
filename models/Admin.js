@@ -11,7 +11,7 @@ const Admin = sequelize.define('Admin', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    phone: {
+    mobile_no: {
         type: DataTypes.STRING,
         allowNull: false
     },
@@ -21,33 +21,37 @@ const Admin = sequelize.define('Admin', {
     },
     code: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     role: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     },
     permission: {
         type: DataTypes.TEXT("long"),
+        allowNull: true
+    },
+    isActive: {
+        type: DataTypes.TINYINT,
         allowNull: false
     },
-    created_by: {
+    createdBy: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
     },
-    updated_by: {
+    updatedBy: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
     },
-    deleted_by: {
+    deletedBy: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
     }
 },
 {
     tableName: 'sp_admins',
-    timestamps: false,
+    timestamps: true,
     paranoid: true,
-    deletedAt: "deleted_at"
+    deletedAt: "deletedAt"
 });
 module.exports = Admin;

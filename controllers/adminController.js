@@ -3,7 +3,9 @@ const bcrypt = require("bcrypt");
 const Admin = require("../models/Admin");
 
 exports.loginPage = (req, res) => {
-    res.render("admin/login");
+    res.render("admin/login", {
+        csrfToken: req.csrfToken() // pass token to EJS
+    });
 }
 exports.checkAdmin = async (req, res) => {
     const { email, password } = req.body;

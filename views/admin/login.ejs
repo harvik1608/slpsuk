@@ -48,6 +48,7 @@
                     <div class="col-lg-5 p-0">
                         <div class="login-content">
                             <form id="loginForm" method="POST" action="/admin/check-admin">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                 <div class="login-userset">
                                     <div class="login-userheading">
                                         <h3>SLPS - Admin Panel</h3>
@@ -107,10 +108,7 @@
                     $.ajax({
                         url: $("#loginForm").attr("action"),
                         type: $("#loginForm").attr("method"),
-                        data: new FormData(this),
-                        processData: false,
-                        contentType: false,
-                        cache: false,
+                        data: $(this).serialize(),
                         beforeSend:function(){
                             $("#loginForm button[type=submit]").html("Checking...").attr("disabled",true);
                         },

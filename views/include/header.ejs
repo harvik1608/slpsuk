@@ -20,10 +20,10 @@
         <link rel="stylesheet" href="/assets/plugins/fontawesome/css/fontawesome.min.css">
         <link rel="stylesheet" href="/assets/plugins/fontawesome/css/all.min.css">
         <link rel="stylesheet" href="/assets/plugins/tabler-icons/tabler-icons.min.css">
-        <link rel="stylesheet" type="text/css" href="<?php echo $site[0]['website_url']; ?>assets/css/toast.css">
+        <link rel="stylesheet" type="text/css" href="/assets/css/toast.css">
         <link rel="stylesheet" href="/assets/css/style.css">
         <style>
-            .jq-toast-single {
+            .jq-toast-single, .jq-toast-heading {
                 font-family: "Nunito" !important;
             }
             label.form-label {
@@ -31,10 +31,13 @@
             }
             #dashboard p {
                 font-size: 16px !important;
-                font-weight: bold !important;
+                /*font-weight: bold !important;*/
             }
             .page-btn a {
-                text-transform: uppercase;
+                /*text-transform: uppercase;*/
+            }
+            .mandadory {
+                color: #FF0000;
             }
         </style>
         <script src="/assets/js/jquery-3.7.1.min.js"></script>
@@ -172,15 +175,106 @@
                             <li class="submenu-open">
                                 <h6 class="submenu-hdr">Users</h6>
                                 <ul id="main_menu_list">
-                                    <li><a href="/admin/users"><i data-feather="box"></i><span>User List</span></a></li>
+                                    <li class="permission" data-module="admin" data-title="Admin">
+                                        <a href="/admin/users">
+                                            <i data-feather="box"></i><span>Admin List</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="submenu-open">
                                 <h6 class="submenu-hdr">Members</h6>
                                 <ul id="main_menu_list">
-                                    <li><a href="admin/quote/list.php"><i data-feather="box"></i><span>Member Request List</span></a></li>
-                                    <li><a href="admin/quote/list.php"><i data-feather="box"></i><span>Member List</span></a></li>
-                                    <li><a href="admin/quote/list.php"><i data-feather="box"></i><span>Family Member List</span></a></li>
+                                    <li class="permission" data-module="member_request" data-title="Member Request">
+                                        <a href="admin/quote/list.php">
+                                            <i data-feather="box"></i><span>Member Request List</span>
+                                        </a>
+                                    </li>
+                                    <li class="permission" data-module="member" data-title="Member">
+                                        <a href="admin/quote/list.php">
+                                            <i data-feather="box"></i><span>Member List</span>
+                                        </a>
+                                    </li>
+                                    <li class="permission" data-module="family_member" data-title="Family Member">
+                                        <a href="admin/quote/list.php">
+                                            <i data-feather="box"></i><span>Family Member List</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="submenu-open">
+                                <h6 class="submenu-hdr">Committees</h6>
+                                <ul id="main_menu_list">
+                                    <li class="permission" data-module="committee" data-title="Committee">
+                                        <a href="/admin/users">
+                                            <i data-feather="box"></i><span>Committee List</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="submenu-open">
+                                <h6 class="submenu-hdr">Event</h6>
+                                <ul id="main_menu_list">
+                                    <li class="permission" data-module="event" data-title="Event">
+                                        <a href="admin/quote/list.php">
+                                            <i data-feather="box"></i><span>Event List</span>
+                                        </a>
+                                    </li>
+                                    <li class="permission" data-module="event_attendance" data-title="Event Attendance">
+                                        <a href="admin/quote/list.php">
+                                            <i data-feather="box"></i><span>Event Attendance List</span>
+                                        </a>
+                                    </li>
+                                    <li class="permission" data-module="upcoming_event" data-title="Upcoming Event">
+                                        <a href="admin/quote/list.php">
+                                            <i data-feather="box"></i><span>Upcoming Event List</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="submenu-open">
+                                <h6 class="submenu-hdr">General</h6>
+                                <ul id="main_menu_list">
+                                    <li class="permission" data-module="banner" data-title="Banner">
+                                        <a href="admin/quote/list.php">
+                                            <i data-feather="box"></i><span>Banner List</span>
+                                        </a>
+                                    </li>
+                                    <li class="permission" data-module="announcement" data-title="Announcement">
+                                        <a href="admin/quote/list.php">
+                                            <i data-feather="box"></i><span>Announcement List</span>
+                                        </a>
+                                    </li>
+                                    <li class="permission" data-module="newsletter" data-title="Newsletter">
+                                        <a href="admin/quote/list.php">
+                                            <i data-feather="box"></i><span>Newsletter List</span>
+                                        </a>
+                                    </li>
+                                    <li class="permission" data-module="policy" data-title="Policy">
+                                        <a href="admin/quote/list.php">
+                                            <i data-feather="box"></i><span>Policy List</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="submenu-open">
+                                <h6 class="submenu-hdr">Other</h6>
+                                <ul id="main_menu_list">
+                                    <li class="permission" data-module="job" data-title="Job">
+                                        <a href="admin/quote/list.php">
+                                            <i data-feather="box"></i><span>Job List</span>
+                                        </a>
+                                    </li>
+                                    <li class="permission" data-module="matrimonial" data-title="Matrimonial">
+                                        <a href="admin/quote/list.php">
+                                            <i data-feather="box"></i><span>Matrimonial List</span>
+                                        </a>
+                                    </li>
+                                    <li class="permission" data-module="business_card" data-title="Business Card">
+                                        <a href="admin/quote/list.php">
+                                            <i data-feather="box"></i><span>Business Card List</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
@@ -219,14 +313,16 @@
                     }
                 });
             });
-            function show_toast(msg,second = 3000)
+            function show_toast(title,msg,type,second = 3000)
             {
                 $.toast({
+                    heading: title,
                     text: msg,
                     showHideTransition: 'fade',
-                    position: 'bottom-center',
+                    icon: type,
+                    position: 'top-right',
                     hideAfter: second
-                })
+                });
             }
         </script>
     </body>

@@ -1,10 +1,14 @@
 const path = require("path");
 const bcrypt = require("bcrypt");
 const ejs = require("ejs");
+const moment = require("moment");
 const Admin = require("../models/Admin");
 
 exports.dashboard = async (req, res) => {
-    const html = await ejs.renderFile(__dirname+"/../views/admin/dashboard.ejs");
+    const currentDate = moment().format('DD MMM, YYYY');
+    const dayName = moment().format('dddd');
+
+    const html = await ejs.renderFile(__dirname+"/../views/admin/dashboard.ejs",{currentDate:currentDate,dayName:dayName});
     res.render("include/header",{
         body: html
     });
