@@ -313,6 +313,40 @@
                     }
                 });
             });
+            function remove_row(deleteUrl)
+            {
+                $.confirm({
+                    title: 'Confirm!',
+                    content: 'Are you sure you want to delete?',
+                    buttons: {
+                        confirm: function () {
+                            $.ajax({
+                                url: deleteUrl,
+                                type: "GET",
+                                success:function(response) {
+                                    if(response.success) {
+                                        show_toast("Success!",response.message,"success");
+                                        setTimeout(function(){
+                                            // window.location.reload();
+                                        },3000);
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    if (xhr.status === 400) {
+                                        const res = xhr.responseJSON;
+                                        show_toast("Oops!",res.message,"error");
+                                    } else {
+                                        show_toast("Oops!","Something went wrong","error");
+                                    }
+                                }
+                            });
+                        },
+                        cancel: function () {
+                            
+                        }
+                    }
+                });
+            }
             function show_toast(title,msg,type,second = 3000)
             {
                 $.toast({

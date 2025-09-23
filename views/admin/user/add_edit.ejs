@@ -90,20 +90,23 @@
 </form>
 <script>
     var page_title = "Admin List";
+    const existingPermissions = <%- admin && admin.permission ? admin.permission : '{}' %>;
     $(document).ready(function(){
         var html = "";
         $("li.permission").each(function(){
             let module_title = $(this).attr("data-title");
             let module_name = $(this).attr("data-module");
 
+            const modulePerm = existingPermissions[module_name] || {};
+
             html += '<tr>';
             html += '<td>'+module_title+'</td>';
-            html += '<td class="py-3"><div class="form-check form-check-md"><input class="form-check-input full" type="checkbox" name="permissions['+module_name+'][full]" value="1" /></div></td>';
-            html += '<td class="py-3"><div class="form-check form-check-md"><input class="form-check-input add" type="checkbox" name="permissions['+module_name+'][add]" value="1" /></div></td>';
-            html += '<td class="py-3"><div class="form-check form-check-md"><input class="form-check-input edit" type="checkbox" name="permissions['+module_name+'][edit]" value="1" /></div></td>';
-            html += '<td class="py-3"><div class="form-check form-check-md"><input class="form-check-input list" type="checkbox" name="permissions['+module_name+'][list]" value="1" /></div></td>';
-            html += '<td class="py-3"><div class="form-check form-check-md"><input class="form-check-input delete" type="checkbox" name="permissions['+module_name+'][delete]" value="1" /></div></td>';
-            html += '<td class="py-3"><div class="form-check form-check-md"><input class="form-check-input export" type="checkbox" name="permissions['+module_name+'][export]" value="1" /></div></td>';
+            html += '<td class="py-3"><div class="form-check form-check-md"><input class="form-check-input full" type="checkbox" name="permissions['+module_name+'][full]" value="1" ' + (modulePerm.full == '1' ? 'checked' : '') + ' /></div></td>';
+            html += '<td class="py-3"><div class="form-check form-check-md"><input class="form-check-input add" type="checkbox" name="permissions['+module_name+'][add]" value="1" ' + (modulePerm.add == '1' ? 'checked' : '') + ' /></div></td>';
+            html += '<td class="py-3"><div class="form-check form-check-md"><input class="form-check-input edit" type="checkbox" name="permissions['+module_name+'][edit]" value="1" ' + (modulePerm.edit == '1' ? 'checked' : '') + ' /></div></td>';
+            html += '<td class="py-3"><div class="form-check form-check-md"><input class="form-check-input list" type="checkbox" name="permissions['+module_name+'][list]" value="1" ' + (modulePerm.list == '1' ? 'checked' : '') + ' /></div></td>';
+            html += '<td class="py-3"><div class="form-check form-check-md"><input class="form-check-input delete" type="checkbox" name="permissions['+module_name+'][delete]" value="1" ' + (modulePerm.delete == '1' ? 'checked' : '') + ' /></div></td>';
+            html += '<td class="py-3"><div class="form-check form-check-md"><input class="form-check-input export" type="checkbox" name="permissions['+module_name+'][export]" value="1" ' + (modulePerm.export == '1' ? 'checked' : '') + ' /></div></td>';
             html += '</tr>';    
         });
         $("#permissionTbl tbody").html(html);
