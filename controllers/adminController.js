@@ -19,7 +19,15 @@ exports.checkAdmin = async (req, res) => {
         if (!isMatch) {
             return res.status(200).json({ success: false, message: "Password does not match." });
         }
-        req.session.user = user;
+        req.session.user = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            mobile_no: user.mobile_no,
+            role: user.role,
+            permission: user.permission
+        };
+        await req.session.save();
         return res.status(200).json({ success: true, message: "",redirect: "/admin/dashboard" });
     } catch (err) {
         console.error(err);

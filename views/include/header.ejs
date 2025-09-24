@@ -175,28 +175,30 @@
                             <li class="submenu-open">
                                 <h6 class="submenu-hdr">Users</h6>
                                 <ul id="main_menu_list">
-                                    <li class="permission" data-module="admin" data-title="Admin">
-                                        <a href="/admin/users">
-                                            <i data-feather="box"></i><span>Admin List</span>
-                                        </a>
-                                    </li>
+                                    <% if (hasPermission(currentUser.id, "admin", "list")) { %>
+                                        <li class="permission" data-module="admin" data-title="Admin">
+                                            <a href="/admin/users">
+                                                <i data-feather="box"></i><span>Admin List</span>
+                                            </a>
+                                        </li>
+                                    <% } %>
                                 </ul>
                             </li>
                             <li class="submenu-open">
                                 <h6 class="submenu-hdr">Members</h6>
                                 <ul id="main_menu_list">
                                     <li class="permission" data-module="member_request" data-title="Member Request">
-                                        <a href="admin/quote/list.php">
+                                        <a href="/admin/member-requests">
                                             <i data-feather="box"></i><span>Member Request List</span>
                                         </a>
                                     </li>
                                     <li class="permission" data-module="member" data-title="Member">
-                                        <a href="admin/quote/list.php">
+                                        <a href="/admin/members">
                                             <i data-feather="box"></i><span>Member List</span>
                                         </a>
                                     </li>
                                     <li class="permission" data-module="family_member" data-title="Family Member">
-                                        <a href="admin/quote/list.php">
+                                        <a href="/admin/family-members">
                                             <i data-feather="box"></i><span>Family Member List</span>
                                         </a>
                                     </li>
@@ -327,7 +329,7 @@
                                     if(response.success) {
                                         show_toast("Success!",response.message,"success");
                                         setTimeout(function(){
-                                            // window.location.reload();
+                                            window.location.reload();
                                         },3000);
                                     }
                                 },

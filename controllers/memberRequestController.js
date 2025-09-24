@@ -2,7 +2,7 @@ const path = require("path");
 const bcrypt = require("bcrypt");
 const ejs = require("ejs");
 const moment = require("moment");
-const Admin = require("../models/Admin");
+const Member = require("../models/Member");
 const helpers = require("../helpers/customHelper");
 const { Op } = require('sequelize');
 const { hasPermission } = require("../helpers/permission");
@@ -12,7 +12,7 @@ exports.index = async (req, res) => {
     if (!hasPermission(req.session.user.id, "admin", "list")) {
         return res.status(403).json({ success: false, message: "Permission denied" });
     }
-    const html = await ejs.renderFile(__dirname+"/../views/admin/user/list.ejs");
+    const html = await ejs.renderFile(__dirname+"/../views/admin/member_request/list.ejs");
     res.render("include/header",{
         body: html,
         hasPermission
@@ -25,13 +25,15 @@ exports.load = async (req, res) => {
         const length = parseInt(req.query.length) || 10;
         const searchValue = req.query['search[value]'] || '';
 
-        const recordsTotal = await Admin.count();
-        const users = await Admin.findAll({
+        const recordsTotal = await Member.count();
+        const users = await Member.findAll({
             where: {
-                role: 2,
+                is_active: 'N',
                 ...(searchValue && {
                     [Op.or]: [
-                        { name: { [Op.like]: `%${searchValue}%` } },
+                        { fname: { [Op.like]: `%${searchValue}%` } },
+                        { mname: { [Op.like]: `%${searchValue}%` } },
+                        { lname: { [Op.like]: `%${searchValue}%` } },
                         { email: { [Op.like]: `%${searchValue}%` } },
                         { mobile_no: { [Op.like]: `%${searchValue}%` } }
                     ]
@@ -46,15 +48,15 @@ exports.load = async (req, res) => {
         const formattedUsers = users.map(user => {
             return {
                 id: user.id,
-                name: user.name,
+                name: user.fname+' '+user.mname+' '+user.lname,
+                address: user.address,
                 email: user.email,
                 mobile_no: user.mobile_no,
-                isActive: user.isActive ? '<span class="badge badge-success badge-xs d-inline-flex align-items-center">Active</span>' : '<span class="badge badge-danger badge-xs d-inline-flex align-items-center">Inactive</span>',
-                createdAt: moment(user.createdAt).format('DD MMM, YYYY'),
                 actions: `
                     <div class="edit-delete-action">
-                        <a href="/admin/users/edit/${helpers.encryptId(user.id)}" class="me-2 p-2" href="edit-product.html"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a>
-                        <a href='javascript:;' onclick="remove_row('/admin/users/delete/${helpers.encryptId(user.id)}')" data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>
+                        <a data-container="body" data-bs-toggle="tooltip" data-bs-placement="bottom" title="View" data-bs-original-title="View" class="example-popover"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>
+                        <a href="/admin/users/edit/${helpers.encryptId(user.id)}" class="btn btn-sm btn-success">Approve</a>&nbsp;
+                        <a href='javascript:;' onclick="remove_row('/admin/users/delete/${helpers.encryptId(user.id)}')" class=" btn btn-sm btn-danger">Reject</a>
                     </div>
                 `
             };
