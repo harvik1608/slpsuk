@@ -7,7 +7,7 @@
 (function () {
   // Flat Picker
   // --------------------------------------------------------------------
-  const flatpickrDate = document.querySelector('#flatpickr-date'),
+  const flatpickrDate = document.querySelector('#dob'),
     flatpickrTime = document.querySelector('#flatpickr-time'),
     flatpickrDateTime = document.querySelector('#flatpickr-datetime'),
     flatpickrMulti = document.querySelector('#flatpickr-multi'),
@@ -50,7 +50,7 @@
   }
 
   // Range
-  if (typeof flatpickrRange != undefined) {
+  if (flatpickrRange) {
     flatpickrRange.flatpickr({
       mode: 'range'
     });

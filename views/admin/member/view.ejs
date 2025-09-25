@@ -1,0 +1,177 @@
+<link rel="stylesheet" href="/assets/plugins/flatpickr/flatpickr.css">
+<link rel="stylesheet" href="/assets/plugins/bootstrap-datepicker/bootstrap-datepicker.css">
+<link rel="stylesheet" href="/assets/plugins/daterangepicker/daterangepicker.css">
+<link rel="stylesheet" href="/assets/plugins/jquery-timepicker/jquery-timepicker.css">
+<link rel="stylesheet" href="/assets/plugins/pickr/pickr-themes.css">
+<div class="page-header">
+    <div class="page-title">
+        <h4><%= page_title %></h4>
+        <h6></h6>
+    </div>
+    <div class="page-btn mt-0">
+        <a href="/admin/member-requests" class="btn btn-secondary" id="backBtn"><i data-feather="arrow-left" class="me-2"></i>Back to <%= page_title %></a>
+    </div>
+</div>
+ <div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="p-3">
+                            <div class="d-flex justify-content-between align-items-center rounded bg-light p-3">                                                
+                                <div class="file-name-icon d-flex align-items-center">
+                                    <a href="#" class="avatar avatar-md border rounded-circle flex-shrink-0 me-2">
+                                        <img src="/assets/img/company/company-01.svg" class="img-fluid" alt="img">
+                                    </a> 
+                                    <div>
+                                        <p class="text-gray-9 fw-medium mb-0">
+                                            <b><%= member['fname'] %> <%= member['mname'] %> <%= member['lname'] %></b>
+                                        </p>
+                                        <p><a href="mailto:<%= member['email'] %>" class="__cf_email__"><%= member['email'] %></a></p>
+                                    </div>
+                                </div>                                        
+                            </div>
+                        </div>
+                        <div class="p-3">                                                
+                            <p class="text-gray-9 fw-medium">Basic Info</p>                                            
+                            <div class="pb-1 border-bottom mb-4">
+                                <div class="row align-items-center">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <p class="fs-12 mb-0">First Name</p>
+                                            <p class="text-gray-9"><%= member['fname'] %></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <p class="fs-12 mb-0">Middle Name</p>
+                                            <p class="text-gray-9"><%= member['mname'] == '' ? '-' : member['mname'] %></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <p class="fs-12 mb-0">Last Name</p>
+                                            <p class="text-gray-9"><%= member['lname'] %></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <p class="fs-12 mb-0">DOB</p>
+                                            <p class="text-gray-9"><%= helpers.format_date(member['dob']) %></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <p class="fs-12 mb-0">Mobile No</p>
+                                            <p class="text-gray-9"><%= member['mobile_no'] == '' ? '-' : member['mobile_no'] %></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <p class="fs-12 mb-0">Home / Landline No</p>
+                                            <p class="text-gray-9"><%= member['home_no'] == '' ? '-' : member['home_no'] %></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <p class="fs-12 mb-0">Native Place</p>
+                                            <p class="text-gray-9"><%= member['native_place'] == '' ? '-' : member['native_place'] %></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <p class="fs-12 mb-0">Original Surname</p>
+                                            <p class="text-gray-9"><%= member['real_surname'] == '' ? '-' : member['real_surname'] %></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <p class="fs-12 mb-0">Post Code</p>
+                                            <p class="text-gray-9"><%= member['postal_code'] == '' ? '-' : member['postal_code'] %></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <p class="fs-12 mb-0">Newsletter</p>
+                                            <p class="text-gray-9"><%= member['is_newsletter'] == '' ? '-' : member['is_newsletter'] %></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <p class="fs-12 mb-0">Marketing</p>
+                                            <p class="text-gray-9"><%= member['is_marketing'] == '' ? '-' : member['is_marketing'] %></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <p class="fs-12 mb-0">Profile Created On</p>
+                                            <p class="text-gray-9"><%= helpers.format_date(member['createdAt']) %></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="mb-3">
+                                            <p class="fs-12 mb-0">Address</p>
+                                            <p class="text-gray-9"><%= member['address'] == '' ? '-' : member['address'] %></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="p-3">
+                            <div class="d-flex justify-content-between align-items-center rounded bg-light p-3">                                                
+                                <div class="file-name-icon d-flex align-items-center">
+                                    <div>
+                                        <p class="text-gray-9 fw-medium mb-0">
+                                            <b>Family Members</b>
+                                        </p>
+                                        <p>Total <%= family_members.length %> members found.</p>
+                                    </div>
+                                </div>                                        
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <div class="table-responsive">
+                                <table class="table" id="user-tbl">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th width="5%">#</th>
+                                            <th width="5%">Name</th>
+                                            <th width="20%">Realtion</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% if (family_members && family_members.length > 0) { %>
+                                            <% family_members.forEach((family_member, index) => { %>
+                                                <tr>
+                                                    <td><%= index + 1 %></td>
+                                                    <td><%= family_member['fname'] %> <%= family_member['mname'] %> <%= family_member['lname'] %></td>
+                                                    <td><%= family_member['relation'] %></td>
+                                                </tr>
+                                            <% }) %>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/plugins/flatpickr/flatpickr.js"></script>
+<script src="/assets/js/forms-pickers.js"></script>
+<script>
+    var page_title = "<%= page_title %>";
+</script>

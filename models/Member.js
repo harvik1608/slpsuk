@@ -7,6 +7,10 @@ const Member = sequelize.define('Member', {
         type: DataTypes.STRING,
         allowNull: true
     },
+    member_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
     mname: {
         type: DataTypes.STRING,
         allowNull: true
@@ -68,6 +72,14 @@ const Member = sequelize.define('Member', {
         allowNull: true
     },
     password: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    family_member: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+    },
+    relation: {
         type: DataTypes.STRING,
         allowNull: true
     },

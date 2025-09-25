@@ -22,7 +22,6 @@
                     <tr>
                         <th width="5%">#</th>
                         <th width="20%">Name</th>
-                        <th width="20%">Address</th>
                         <th width="20%">Email</th>
                         <th width="15%">Mobile No.</th>
                         <th width="10%" class="no-sort"></th>
@@ -58,7 +57,6 @@
             "columns": [
                 { data: 'id' },
                 { data: 'name' },
-                { data: 'address' },
                 { data: 'email' },
                 { data: 'mobile_no' },
                 { 
@@ -87,4 +85,82 @@
             }  
         });
     });
+    function approve_member_request(member_id)
+    {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        $.confirm({
+            title: 'Confirm!',
+            content: 'Are you sure to approve this member request?',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        url: "/admin/member-requests/approve",
+                        type: "POST",
+                        data:{
+                            member_id: member_id,
+                            _csrf: csrfToken
+                        },
+                        success:function(response) {
+                            if(response.success) {
+                                show_toast("Success!",response.message,"success");
+                                setTimeout(function(){
+                                    window.location.reload();
+                                },3000);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            if (xhr.status === 400) {
+                                const res = xhr.responseJSON;
+                                show_toast("Oops!",res.message,"error");
+                            } else {
+                                show_toast("Oops!","Something went wrong","error");
+                            }
+                        }
+                    });
+                },
+                cancel: function () {
+                    
+                }
+            }
+        });
+    }
+    function reject_member_request(member_id)
+    {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        $.confirm({
+            title: 'Confirm!',
+            content: 'Are you sure to reject this member request?',
+            buttons: {
+                confirm: function () {
+                    $.ajax({
+                        url: "/admin/member-requests/reject",
+                        type: "POST",
+                        data:{
+                            member_id: member_id,
+                            _csrf: csrfToken
+                        },
+                        success:function(response) {
+                            if(response.success) {
+                                show_toast("Success!",response.message,"success");
+                                setTimeout(function(){
+                                    window.location.reload();
+                                },3000);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            if (xhr.status === 400) {
+                                const res = xhr.responseJSON;
+                                show_toast("Oops!",res.message,"error");
+                            } else {
+                                show_toast("Oops!","Something went wrong","error");
+                            }
+                        }
+                    });
+                },
+                cancel: function () {
+                    
+                }
+            }
+        });
+    }
 </script>

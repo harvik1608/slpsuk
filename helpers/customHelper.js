@@ -37,4 +37,8 @@ module.exports = {
         decrypted += decipher.final('utf8');
         return decrypted;
     },
+
+    format_date: (date) => {
+        return moment(date).format("DD MMM, YYYY");
+    },
 };

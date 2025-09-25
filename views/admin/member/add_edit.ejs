@@ -1,0 +1,112 @@
+<link rel="stylesheet" href="/assets/plugins/flatpickr/flatpickr.css">
+<link rel="stylesheet" href="/assets/plugins/bootstrap-datepicker/bootstrap-datepicker.css">
+<link rel="stylesheet" href="/assets/plugins/daterangepicker/daterangepicker.css">
+<link rel="stylesheet" href="/assets/plugins/jquery-timepicker/jquery-timepicker.css">
+<link rel="stylesheet" href="/assets/plugins/pickr/pickr-themes.css">
+<div class="page-header">
+    <div class="page-title">
+        <h4><%= page_title %></h4>
+        <h6>(<span class='mandadory'>*</span>) indicates required field.</h6>
+    </div>
+    <div class="page-btn mt-0">
+        <a href="/admin/member-requests" class="btn btn-secondary" id="backBtn"><i data-feather="arrow-left" class="me-2"></i>Back to <%= page_title %></a>
+    </div>
+</div>
+<form action="<%= member ? '/admin/users/update/' + helpers.encryptId(member.id) : '/admin/users/store' %>" method="POST" enctype="multipart/form-data" id="mainForm">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4><%= member['fname'] %> <%= member['mname'] %> <%= member['lname'] %></h4>
+                </div>
+                <div class="card-body profile-body">
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">First Name<span class="text-danger ms-1">*</span></label>
+                                <input type="text" class="form-control" name="fname" id="fname" value="<%= member['fname'] %>" disabled />
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Middle Name</label>
+                                <input type="text" class="form-control" name="mname" id="mname" value="<%= member['mname'] %>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Last Name<span class="text-danger ms-1">*</span></label>
+                                <input type="text" class="form-control" name="lname" id="lname" value="<%= member['lname'] %>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">DOB<span class="text-danger ms-1">*</span></label>
+                                <input type="text" class="form-control" name="dob" id="dob" value="<%= moment(member['dob']).format("YYYY-MM-DD") %>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Mobile No</label>
+                                <input type="number" class="form-control" name="mobile_no" id="mobile_no" value="<%= member['mobile_no'] %>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Home / Landline No</label>
+                                <input type="number" class="form-control" name="home_no" id="home_no" value="<%= member['home_no'] %>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Native Place</label>
+                                <input type="text" class="form-control" name="native_place" id="native_place" value="<%= member['native_place'] %>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Original Surname</label>
+                                <input type="text" class="form-control" name="real_surname" id="real_surname" value="<%= member['real_surname'] %>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Post Code</label>
+                                <input type="text" class="form-control" name="postal_code" id="postal_code" value="<%= member['postal_code'] %>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" name="address" id="address" value="<%= member['address'] %>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Marketing</label>
+                                <select class="select" name="is_marketing" id="is_marketing">
+                                    <option value="Y" <%= member && member['is_marketing'] == 'Y' ? 'selected' : '' %>>Yes</option>
+                                    <option value="N" <%= member && member['is_marketing'] == 'N' ? 'selected' : '' %>>No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Newsletter</label>
+                                <select class="select" name="is_newsletter" id="is_newsletter">
+                                    <option value="Y" <%= member && member['is_newsletter'] == 'Y' ? 'selected' : '' %>>Yes</option>
+                                    <option value="N" <%= member && member['is_newsletter'] == 'N' ? 'selected' : '' %>>No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="/assets/plugins/flatpickr/flatpickr.js"></script>
+<script src="/assets/js/forms-pickers.js"></script>
+<script>
+    var page_title = "<%= page_title %>";
+</script>

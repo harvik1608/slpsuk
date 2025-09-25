@@ -8,6 +8,7 @@ const adminController = require("../controllers/adminController");
 const dashboardController = require("../controllers/dashboardController");
 const userController = require("../controllers/userController");
 const memberRequestController = require("../controllers/memberRequestController");
+const memberController = require("../controllers/memberController");
 
 router.get("/", adminController.loginPage);
 router.post("/check-admin", adminController.checkAdmin);
@@ -23,4 +24,12 @@ router.get("/users/delete/:id", userController.delete);
 
 router.get("/member-requests", memberRequestController.index);
 router.get("/load-member-requests", memberRequestController.load);
+router.post("/member-requests/approve", memberRequestController.approve);
+router.post("/member-requests/reject", memberRequestController.reject);
+router.get("/member-requests/view/:id", memberRequestController.view);
+
+router.get("/members", memberController.index);
+router.get("/load-members", memberController.load);
+router.get("/members/export", memberController.export);
+router.get("/members/view/:id", memberController.view);
 module.exports = router;
