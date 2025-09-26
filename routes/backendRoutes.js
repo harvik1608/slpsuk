@@ -11,6 +11,7 @@ const memberRequestController = require("../controllers/memberRequestController"
 const memberController = require("../controllers/memberController");
 const familyMemberController = require("../controllers/familyMemberController");
 const committeeController = require("../controllers/committeeController");
+const upload = require("../middleware/upload");
 
 router.get("/", adminController.loginPage);
 router.post("/check-admin", adminController.checkAdmin);
@@ -50,7 +51,7 @@ router.get("/family-members/delete/:id", familyMemberController.delete);
 router.get("/committees", committeeController.index);
 router.get("/load-committees", committeeController.load);
 router.get("/committees/create", committeeController.create);
-router.post("/committees/store", committeeController.store);
+router.post("/committees/store", upload.single("avatar"),committeeController.store);
 router.get("/committees/edit/:id", committeeController.edit);
 router.post("/committees/update/:id", committeeController.update);
 router.get("/committees/export-pdf", committeeController.export);

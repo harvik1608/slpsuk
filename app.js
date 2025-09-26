@@ -28,12 +28,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, "uploads/"),
-    filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
-});
-const upload = multer({ storage });
-app.use(upload.none());
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) => cb(null, "uploads/"),
+//     filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
+// });
+// const upload = multer({ storage });
+// app.use(upload.none());
 
 const csrfProtection = csrf({ cookie: false });
 app.use(csrfProtection);
@@ -45,6 +45,7 @@ app.use((req, res, next) => {
 
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use((req, res, next) => {
     res.locals.hasPermission = helpers.hasPermission;

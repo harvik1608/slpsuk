@@ -5,6 +5,8 @@ const moment = require("moment");
 const puppeteer = require("puppeteer");
 const crypto = require("crypto");
 const ExcelJS = require("exceljs");
+const csrf = require("csurf");
+const csrfProtection = csrf({ cookie: true });
 const Committee = require("../models/Committee");
 const helpers = require("../helpers/customHelper");
 const { Op } = require('sequelize');
@@ -109,11 +111,16 @@ exports.store = async (req, res) => {
                     });
                 }
             }
+            let avatarPath = "";
+            // if (req.file) {
+            //     avatarPath = `/uploads/${req.file.filename}`;
+            // }
             const committee = await Committee.create({
                 name: req.body.name,
                 position: req.body.position,
                 mobile: req.body.mobile,
                 email: req.body.email,
+                avatar: avatarPath,
                 isActive: req.body.isActive,
                 createdBy: req.session.user ? req.session.user.id : 0,
                 createdAt: moment().format("YYYY-MM-DD HH:mm:ss")
@@ -201,45 +208,11 @@ exports.update = async (req, res) => {
         res.status(400).json({ success: false, message: error });
     }
 }
-exports.view = async (req, res) => {
-    try {
-        const encryptedId = req.params.id;
-        const memberId = helpers.decryptId(encryptedId);
-
-        const member = await Member.findByPk(memberId);
-        if (!member) {
-            return res.status(404).send("Member not found");
-        }
-        const family_members = await Member.findAll({
-            where: {
-                member_id: memberId
-            },
-            order: [['id', 'DESC']]
-        });
-        const html = await ejs.renderFile(__dirname+"/../views/admin/member/view.ejs",{
-            member:member,
-            family_members: family_members,
-            moment: moment,
-            page_title: "Member List",
-            helpers
-        });
-        res.render("include/header",{
-            body: html
-        });
-    } catch (error) {
-        console.log(error);
-        res.redirect('/admin/members');
-    }
-}
 exports.export = async (req, res) => {
     try {
-        const whereCondition = { is_active: 'Y', member_id: 0 };
-        const members = await Member.findAll({
-            where: whereCondition,
-            order: [['id', 'DESC']]
-        });
-        const templatePath = path.join(__dirname, "../views/admin/member/export.ejs"); // adjust path
-        const html = await ejs.renderFile(templatePath, { members });
+        const rows = await Committee.findAll();
+        const templatePath = path.join(__dirname, "../views/admin/committee/export.ejs"); // adjust path
+        const html = await ejs.renderFile(templatePath, { rows });
 
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
@@ -253,7 +226,7 @@ exports.export = async (req, res) => {
 
         res.set({
             "Content-Type": "application/pdf",
-            "Content-Disposition": "attachment; filename=output.pdf",
+            "Content-Disposition": "attachment; filename=committee.pdf",
             "Content-Length": pdfBuffer.length
         });
         res.send(pdfBuffer);
@@ -264,32 +237,26 @@ exports.export = async (req, res) => {
 }
 exports.export_excel = async (req, res) => {
     try {
-        const whereCondition = { is_active: 'Y', member_id: 0 };
-        const members = await Member.findAll({
-            where: whereCondition,
-            order: [['id', 'DESC']]
-        });
+        const rows = await Committee.findAll();
         
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet("Family Members");
 
         worksheet.columns = [
             { header: "#", key: "s_no", width: 5 },
-            { header: "Member ID", key: "member_id", width: 20 },
-            { header: "Full Name", key: "fname", width: 20 },
+            { header: "Name", key: "name", width: 20 },
+            { header: "Position", key: "position", width: 15 },
             { header: "Email", key: "email", width: 15 },
-            { header: "Mobile No", key: "mobile_no", width: 15 },
-            { header: "Family Members", key: "family_member", width: 15 }
+            { header: "Mobile No", key: "mobile", width: 15 },
         ];
 
-        members.forEach((member, index) => {
+        rows.forEach((row, index) => {
             worksheet.addRow({
                 s_no: index + 1,
-                member_id: member.id,
-                fname: member.fname+" "+member.mname+" "+member.lname,
-                email: member.email,
-                mobile_no: member.mobile_no,
-                family_member: member.family_member
+                name: row.name,
+                position: row.position,
+                email: row.email,
+                mobile: row.mobile
             });
         });
 
@@ -299,7 +266,7 @@ exports.export_excel = async (req, res) => {
         );
         res.setHeader(
             "Content-Disposition",
-            "attachment; filename=members.xlsx"
+            "attachment; filename=committees.xlsx"
         );
 
         // Write workbook to response
@@ -313,15 +280,15 @@ exports.export_excel = async (req, res) => {
 exports.delete = async (req, res) => {
     try {
         const encryptedId = req.params.id;
-        const memberId = parseInt(helpers.decryptId(encryptedId));
+        const committeeId = parseInt(helpers.decryptId(encryptedId));
         
-        const member = await Member.findByPk(memberId);
-        if (!member) {
-            return res.status(404).send("Member not found");
+        const committee = await Committee.findByPk(committeeId);
+        if (!committee) {
+            return res.status(404).send("Committee not found");
         }
-        await member.update({deletedBy: req.session.user ? req.session.user.id : 0});
-        await member.destroy();
-        return res.status(200).json({ success: true, message: "Member deleted successfully" });
+        await committee.update({deletedBy: req.session.user ? req.session.user.id : 0});
+        await committee.destroy();
+        return res.status(200).json({ success: true, message: "Committee deleted successfully" });
     } catch (error) {
         console.log(error);
         res.status(500).send("Something went wrong");
