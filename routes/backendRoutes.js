@@ -10,6 +10,7 @@ const userController = require("../controllers/userController");
 const memberRequestController = require("../controllers/memberRequestController");
 const memberController = require("../controllers/memberController");
 const familyMemberController = require("../controllers/familyMemberController");
+const committeeController = require("../controllers/committeeController");
 
 router.get("/", adminController.loginPage);
 router.post("/check-admin", adminController.checkAdmin);
@@ -44,4 +45,15 @@ router.get("/family-members", familyMemberController.index);
 router.get("/load-family-members", familyMemberController.load);
 router.get("/family-members/export-pdf", familyMemberController.export);
 router.get("/family-members/export-excel", familyMemberController.export_excel);
+router.get("/family-members/delete/:id", familyMemberController.delete);
+
+router.get("/committees", committeeController.index);
+router.get("/load-committees", committeeController.load);
+router.get("/committees/create", committeeController.create);
+router.post("/committees/store", committeeController.store);
+router.get("/committees/edit/:id", committeeController.edit);
+router.post("/committees/update/:id", committeeController.update);
+router.get("/committees/export-pdf", committeeController.export);
+router.get("/committees/export-excel", committeeController.export_excel);
+router.get("/committees/delete/:id", committeeController.delete);
 module.exports = router;

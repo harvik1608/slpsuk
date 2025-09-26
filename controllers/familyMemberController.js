@@ -58,19 +58,18 @@ exports.load = async (req, res) => {
         const recordsFiltered = searchValue ? users.length : recordsTotal;
 
         const formattedUsers = users.map((user, index) => {
-            const parentName = user.parent ? `${user.parent.fname} ${user.parent.mname} ${user.parent.lname}` : "N/A";
+            const parentName = user.parent ? `${user.parent.fname} ${user.parent.lname}` : "N/A";
 
             return {
                 id: start + index + 1,
                 member_id: user.id,
                 name: user.fname+' '+user.mname+' '+user.lname,
-                email: user.email,
-                relation: user.relation,
                 parent_name: parentName,
+                relation: user.relation,
                 actions: `
                     <div class="edit-delete-action">
                         <div class="edit-delete-action">
-                            <a href='javascript:;' onclick="remove_row('/admin/members/delete/${helpers.encryptId(user.id)}')" data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>
+                            <a href='javascript:;' onclick="remove_row('/admin/family-members/delete/${helpers.encryptId(user.id)}')" data-bs-toggle="modal" data-bs-target="#delete-modal" class="p-2" href="javascript:void(0);"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></a>
                         </div>
                     </div>
                 `
@@ -127,9 +126,16 @@ exports.export = async (req, res) => {
 }
 exports.export_excel = async (req, res) => {
     try {
-        const whereCondition = { is_active: 'Y', member_id: 0 };
+        const whereCondition = { member_id: { [Op.gt]: 0 } };
         const members = await Member.findAll({
             where: whereCondition,
+            include: [
+                {
+                    model: Member,
+                    as: "parent", 
+                    attributes: ["id", "fname", "mname", "lname"]
+                }
+            ],
             order: [['id', 'DESC']]
         });
         
@@ -139,20 +145,22 @@ exports.export_excel = async (req, res) => {
         worksheet.columns = [
             { header: "#", key: "s_no", width: 5 },
             { header: "Member ID", key: "member_id", width: 20 },
-            { header: "Full Name", key: "fname", width: 20 },
-            { header: "Email", key: "email", width: 15 },
-            { header: "Mobile No", key: "mobile_no", width: 15 },
-            { header: "Family Members", key: "family_member", width: 15 }
+            { header: "Family Member Name", key: "family_member_name", width: 20 },
+            { header: "Main Member Name", key: "main_member_name", width: 15 },
+            { header: "Relation", key: "relation", width: 15 },
+            { header: "Email", key: "email", width: 15 }
         ];
 
         members.forEach((member, index) => {
+            const parentName = member.parent ? `${member.parent.fname} ${member.parent.lname}` : "N/A";
+
             worksheet.addRow({
                 s_no: index + 1,
                 member_id: member.id,
-                fname: member.fname+" "+member.mname+" "+member.lname,
-                email: member.email,
-                mobile_no: member.mobile_no,
-                family_member: member.family_member
+                family_member_name: member.fname+" "+member.mname+" "+member.lname,
+                main_member_name: parentName,
+                relation: member.relation,
+                email: member.email
             });
         });
 
@@ -162,7 +170,7 @@ exports.export_excel = async (req, res) => {
         );
         res.setHeader(
             "Content-Disposition",
-            "attachment; filename=members.xlsx"
+            "attachment; filename=family_members.xlsx"
         );
 
         // Write workbook to response
@@ -180,11 +188,11 @@ exports.delete = async (req, res) => {
         
         const member = await Member.findByPk(memberId);
         if (!member) {
-            return res.status(404).send("Member not found");
+            return res.status(404).send("Family Member not found");
         }
         await member.update({deletedBy: req.session.user ? req.session.user.id : 0});
         await member.destroy();
-        return res.status(200).json({ success: true, message: "Member deleted successfully" });
+        return res.status(200).json({ success: true, message: "Family Member has been deleted." });
     } catch (error) {
         console.log(error);
         res.status(500).send("Something went wrong");

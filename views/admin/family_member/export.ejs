@@ -35,16 +35,16 @@
     </style>
 </head>
 <body>
-    <h1>Family Members List</h1>
+    <h1>Family Member List</h1>
     <table>
         <thead>
             <tr>
                 <th width="5%">#</th>
                 <th width="10%">Member ID</th>
-                <th width="30%">Full Name</th>
-                <th width="30%">Email</th>
-                <th width="10%">Mobile</th>
-                <th width="15%">Family Members</th>
+                <th width="30%">Family Member Name</th>
+                <th width="30%">Main Member Name</th>
+                <th width="10%">Relation</th>
+                <th width="15%">Email</th>
             </tr>
         </thead>
         <tbody>
@@ -53,9 +53,9 @@
                     <td><%= index + 1 %></td>
                     <td><%= member.id %></td>
                     <td><%= member.fname %> <%= member.mname %> <%= member.lname %></td>
+                    <td><%= member.parent ? `${member.parent.fname} ${member.parent.lname}` : "N/A" %></td>
+                    <td><%= member.relation %></td>
                     <td><%= member.email %></td>
-                    <td><%= member.mobile_no %></td>
-                    <td><%= member.family_member %></td>
                 </tr>
             <% }) %>
         </tbody>
