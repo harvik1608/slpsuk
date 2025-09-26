@@ -8,16 +8,15 @@
         <h4>Member List</h4>
         <h6>(<span class='mandadory'>*</span>) indicates required field.</h6>
     </div>
-    <div class="page-btn mt-0">
-        <a href="/admin/members" class="btn btn-secondary" id="backBtn"><i data-feather="arrow-left" class="me-2"></i>Back to Member List</a>
-    </div>
 </div>
-<form action="<%= member ? '/admin/users/update/' + helpers.encryptId(member.id) : '/admin/users/store' %>" method="POST" enctype="multipart/form-data" id="mainForm">
+<form action="<%= member ? '/admin/members/update/' + helpers.encryptId(member.id) : '/admin/members/store' %>" method="POST" enctype="multipart/form-data" id="mainForm">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+    <input type="hidden" name="deleted_ids" id="deleted_ids" />
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>New Member</h4>
+                    <h4><%= member ? 'Edit' : 'New' %> Member</h4>
                 </div>
                 <div class="card-body profile-body">
                     <div class="row">
@@ -30,55 +29,55 @@
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Middle Name</label>
-                                <input type="text" class="form-control" name="mname" id="mname" value="<%= member ? member['fname'] : '' %>" />
+                                <input type="text" class="form-control" name="mname" id="mname" value="<%= member ? member['mname'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Last Name<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control" name="lname" id="lname" value="<%= member ? member['fname'] : '' %>" />
+                                <input type="text" class="form-control" name="lname" id="lname" value="<%= member ? member['lname'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">DOB<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control" name="dob" id="dob" value="<%= member ? member['fname'] : '' %>" />
+                                <input type="text" class="form-control" name="dob" id="dob" value="<%= member ? member['dob'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Mobile No</label>
-                                <input type="number" class="form-control" name="mobile_no" id="mobile_no" value="<%= member ? member['fname'] : '' %>" />
+                                <input type="number" class="form-control" name="mobile_no" id="mobile_no" value="<%= member ? member['mobile_no'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Home / Landline No</label>
-                                <input type="number" class="form-control" name="home_no" id="home_no" value="<%= member ? member['fname'] : '' %>" />
+                                <input type="number" class="form-control" name="home_no" id="home_no" value="<%= member ? member['home_no'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Native Place</label>
-                                <input type="text" class="form-control" name="native_place" id="native_place" value="<%= member ? member['fname'] : '' %>" />
+                                <input type="text" class="form-control" name="native_place" id="native_place" value="<%= member ? member['native_place'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Original Surname</label>
-                                <input type="text" class="form-control" name="real_surname" id="real_surname" value="<%= member ? member['fname'] : '' %>" />
+                                <input type="text" class="form-control" name="real_surname" id="real_surname" value="<%= member ? member['real_surname'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Post Code</label>
-                                <input type="text" class="form-control" name="postal_code" id="postal_code" value="<%= member ? member['fname'] : '' %>" />
+                                <input type="text" class="form-control" name="postal_code" id="postal_code" value="<%= member ? member['postal_code'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-8 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Address</label>
-                                <input type="text" class="form-control" name="address" id="address" value="<%= member ? member['fname'] : '' %>" />
+                                <input type="text" class="form-control" name="address" id="address" value="<%= member ? member['address'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-2 col-sm-12">
@@ -99,14 +98,123 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Email<span class="text-danger ms-1">*</span></label>
+                                <input type="text" class="form-control" name="email" id="email" value="<%= member ? member['email'] : '' %>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Password<span class="text-danger ms-1"><%= member ? '' : '*' %></span></label>
+                                <input type="text" class="form-control" name="password" id="password" />
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Confrim Password<span class="text-danger ms-1"><%= member ? '' : '*' %></span></label>
+                                <input type="text" class="form-control" name="confirm_password" id="confirm_password" />
+                            </div>
+                        </div>
                     </div>
                     <div id="add_family_member">
-
+                        <% if(family_members.length > 0) { %>
+                            <% family_members.forEach((family_member, i) => { %>
+                                <input type="hidden" name="family_members[<%= i %>][id]" value="<%= family_member.id %>" />
+                                <div class="row" id="<%= family_member.id %>">
+                                    <hr>
+                                    <div class="col-lg-10 col-sm-10">
+                                        <h3>Family Member's Details</h3>
+                                    </div>
+                                    <div class="col-lg-2 col-sm-2">
+                                        <p><a class='pull-right btn btn-sm btn-danger' onclick='remove_family_member(<%= family_member.id %>)'><i class="fas fa-times me-1"></i></a></p><br>
+                                    </div><hr>
+                                    <div class="col-lg-3 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Family Member's First Name<span class="text-danger ms-1">*</span></label>
+                                            <input type="text" class="form-control" name="family_members[<%= i %>][fname]" value="<%= family_member.fname %>" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Family Member's Middle Name</label>
+                                            <input type="text" class="form-control" name="family_members[<%= i %>][mname]" value="<%= family_member.mname %>" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Family Member's Last Name<span class="text-danger ms-1">*</span></label>
+                                            <input type="text" class="form-control" name="family_members[<%= i %>][lname]" value="<%= family_member.lname %>" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Family Member's DOB<span class="text-danger ms-1">*</span></label>
+                                            <input type="date" class="form-control" name="family_members[<%= i %>][dob]" value="<%= family_member.dob %>" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Family Member's Mobile No</label>
+                                            <input type="number" class="form-control" name="family_members[<%= i %>][mobile_no]" value="<%= family_member.mobile_no %>" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Family Member's Home / Landline No</label>
+                                            <input type="number" class="form-control" name="family_members[<%= i %>][home_no]" value="<%= family_member.home_no %>" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Family Member's Email</label>
+                                            <input type="text" class="form-control" name="family_members[<%= i %>][email]" value="<%= family_member.email %>" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Family Member's Postal Code</label>
+                                            <input type="text" class="form-control" name="family_members[<%= i %>][postal_code]" value="<%= family_member.postal_code %>" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Relation</label>
+                                            <input type="text" class="form-control" name="family_members[<%= i %>][relation]" value="<%= family_member.relation %>" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Family Member's Address</label>
+                                            <input type="text" class="form-control" name="family_members[<%= i %>][address]" value="<%= family_member.address %>" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Marketing</label>
+                                            <select class="form-control" name="family_members[<%= i %>][is_marketing]">
+                                                <option value="Y" <%= family_member.is_marketing == 'Y' ? 'selected' : '' %>>Yes</option>
+                                                <option value="N" <%= family_member.is_marketing == 'N' ? 'selected' : '' %>>No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12">
+                                        <div class="mb-3">
+                                            <label class="form-label">Newsletter</label>
+                                            <select class="select form-control" name="family_members[<%= i %>][is_newsletter]">
+                                                <option value="Y" <%= family_member.is_newsletter == 'Y' ? 'selected' : '' %>>Yes</option>
+                                                <option value="N" <%= family_member.is_newsletter == 'N' ? 'selected' : '' %>>No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }) %>    
+                        <% } %>
                     </div>
                     <button type="button" class="btn btn-primary btn-sm" onclick="add_family_member()">Add Family Member</button>
                     <div class="text-end">
-                        <button type="reset" class="btn btn-primary">Clear</button>
-                        <button type="submit" class="btn btn-secondary">Submit</button>
+                        <a href="/admin/members" class="btn btn-secondary" id="backBtn"><i data-feather="arrow-left" class="me-2"></i>Back</a>
+                        <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </div>
             </div>
@@ -117,12 +225,49 @@
 <script src="/assets/js/forms-pickers.js"></script>
 <script>
     var page_title = "Member List";
+    var no = -1;
+    $(document).ready(function(){
+        $("#mainForm").submit(function(e){
+            e.preventDefault();
+
+            $.ajax({
+                url: $("#mainForm").attr("action"),
+                type: $("#mainForm").attr("method"),
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                cache: false,
+                beforeSend:function(){
+                    $("#mainForm button[type=submit]").html("Submitting...").attr("disabled",true);
+                },
+                success:function(response){
+                    if(response.success) {
+                        show_toast("Success!",response.message,"success");
+                        setTimeout(function(){
+                            window.location.href = $("#backBtn").attr("href");
+                        },3000);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $("#mainForm button[type=submit]").html("Submit").attr("disabled",false);
+                    if (xhr.status === 400) {
+                        const res = xhr.responseJSON;
+                        show_toast("Oops!",res.message,"error");
+                    } else {
+                        show_toast("Oops!","Something went wrong","error");
+                    }
+                }
+            });
+        });
+    });
     function add_family_member()
     {
+        no++;
         var randomNo = rand(10000, 99999);
 
         let html = "";
         html = `<div class="row" id="${randomNo}">
+            <input type="hidden" name="family_members[${no}][id]" value="${no}" />
             <hr><div class="col-lg-10 col-sm-10">
                 <h3>Family Member's Details</h3>
             </div>
@@ -132,67 +277,67 @@
             <div class="col-lg-3 col-sm-12">
                 <div class="mb-3">
                     <label class="form-label">Family Member's First Name<span class="text-danger ms-1">*</span></label>
-                    <input type="text" class="form-control" name="fname" id="fname" />
+                    <input type="text" class="form-control" name="family_members[${no}][fname]" />
                 </div>
             </div>
             <div class="col-lg-3 col-sm-12">
                 <div class="mb-3">
                     <label class="form-label">Family Member's Middle Name</label>
-                    <input type="text" class="form-control" name="mname" id="mname" />
+                    <input type="text" class="form-control" name="family_members[${no}][mname]" />
                 </div>
             </div>
             <div class="col-lg-3 col-sm-12">
                 <div class="mb-3">
                     <label class="form-label">Family Member's Last Name<span class="text-danger ms-1">*</span></label>
-                    <input type="text" class="form-control" name="lname" id="lname" />
+                    <input type="text" class="form-control" name="family_members[${no}][lname]" />
                 </div>
             </div>
             <div class="col-lg-3 col-sm-12">
                 <div class="mb-3">
                     <label class="form-label">Family Member's DOB<span class="text-danger ms-1">*</span></label>
-                    <input type="text" class="form-control" name="dob" id="dob" />
+                    <input type="date" class="form-control" name="family_members[${no}][dob]" />
                 </div>
             </div>
             <div class="col-lg-3 col-sm-12">
                 <div class="mb-3">
                     <label class="form-label">Family Member's Mobile No</label>
-                    <input type="number" class="form-control" name="mobile_no" id="mobile_no" />
+                    <input type="number" class="form-control" name="family_members[${no}][mobile_no]" />
                 </div>
             </div>
             <div class="col-lg-3 col-sm-12">
                 <div class="mb-3">
                     <label class="form-label">Family Member's Home / Landline No</label>
-                    <input type="number" class="form-control" name="home_no" id="home_no" />
+                    <input type="number" class="form-control" name="family_members[${no}][home_no]" />
                 </div>
             </div>
             <div class="col-lg-3 col-sm-12">
                 <div class="mb-3">
                     <label class="form-label">Family Member's Email</label>
-                    <input type="text" class="form-control" name="family_member_email[]" />
+                    <input type="text" class="form-control" name="family_members[${no}][email]" />
                 </div>
             </div>
             <div class="col-lg-3 col-sm-12">
                 <div class="mb-3">
                     <label class="form-label">Family Member's Postal Code</label>
-                    <input type="text" class="form-control" name="family_member_postal_code[]" />
+                    <input type="text" class="form-control" name="family_members[${no}][postal_code]" />
                 </div>
             </div>
             <div class="col-lg-3 col-sm-12">
                 <div class="mb-3">
                     <label class="form-label">Relation</label>
-                    <input type="text" class="form-control" name="family_member_relation[]" />
+                    <input type="text" class="form-control" name="family_members[${no}][relation]" />
                 </div>
             </div>
             <div class="col-lg-6 col-sm-12">
                 <div class="mb-3">
                     <label class="form-label">Family Member's Address</label>
-                    <input type="text" class="form-control" name="family_member_address[]" />
+                    <input type="text" class="form-control" name="family_members[${no}][address]" />
                 </div>
             </div>
             <div class="col-lg-3 col-sm-12">
                 <div class="mb-3">
                     <label class="form-label">Marketing</label>
-                    <select class="form-control" name="family_member_is_marketing[]">
+                    <select class="form-control" name="family_members[${no}][is_marketing]">
                         <option value="Y">Yes</option>
                         <option value="N">No</option>
                     </select>
@@ -201,16 +346,23 @@
             <div class="col-lg-3 col-sm-12">
                 <div class="mb-3">
                     <label class="form-label">Newsletter</label>
-                    <select class="select form-control" name="family_member_is_newsletter[]">
+                    <select class="select form-control" name="family_members[${no}][is_newsletter]">
                         <option value="Y">Yes</option>
                         <option value="N">No</option>
                     </select>
                 </div>
-            </div>`;
+            </div></div>`;
         $("#add_family_member").append(html);
     }
     function remove_family_member(no)
     {
+        var deleted_ids = $("#deleted_ids").val();
+        if(deleted_ids == "") {
+            deleted_ids = no;
+        } else {
+            deleted_ids = deleted_ids+","+no;
+        }
+        $("#deleted_ids").val(deleted_ids);
         $("#"+no).remove();
     }
     function rand(min, max) {

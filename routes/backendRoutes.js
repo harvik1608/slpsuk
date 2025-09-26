@@ -9,6 +9,7 @@ const dashboardController = require("../controllers/dashboardController");
 const userController = require("../controllers/userController");
 const memberRequestController = require("../controllers/memberRequestController");
 const memberController = require("../controllers/memberController");
+const familyMemberController = require("../controllers/familyMemberController");
 
 router.get("/", adminController.loginPage);
 router.post("/check-admin", adminController.checkAdmin);
@@ -31,6 +32,16 @@ router.get("/member-requests/view/:id", memberRequestController.view);
 router.get("/members", memberController.index);
 router.get("/load-members", memberController.load);
 router.get("/members/create", memberController.create);
-router.get("/members/export", memberController.export);
+router.post("/members/store", memberController.store);
+router.get("/members/edit/:id", memberController.edit);
+router.post("/members/update/:id", memberController.update);
+router.get("/members/export-pdf", memberController.export);
+router.get("/members/export-excel", memberController.export_excel);
 router.get("/members/view/:id", memberController.view);
+router.get("/members/delete/:id", memberController.delete);
+
+router.get("/family-members", familyMemberController.index);
+router.get("/load-family-members", familyMemberController.load);
+router.get("/family-members/export-pdf", familyMemberController.export);
+router.get("/family-members/export-excel", familyMemberController.export_excel);
 module.exports = router;

@@ -122,4 +122,10 @@ const Member = sequelize.define('Member', {
     paranoid: true,
     deletedAt: "deletedAt"
 });
+// A member can have a parent member
+Member.belongsTo(Member, { as: "parent", foreignKey: "member_id" });
+
+// Optionally, a member can have many children
+Member.hasMany(Member, { as: "children", foreignKey: "member_id" });
+
 module.exports = Member;
