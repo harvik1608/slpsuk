@@ -30,6 +30,7 @@ router.get("/member-requests/view/:id", memberRequestController.view);
 
 router.get("/members", memberController.index);
 router.get("/load-members", memberController.load);
+router.get("/members/create", memberController.create);
 router.get("/members/export", memberController.export);
 router.get("/members/view/:id", memberController.view);
 module.exports = router;

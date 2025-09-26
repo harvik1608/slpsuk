@@ -9,7 +9,11 @@
         <h6></h6>
     </div>
     <div class="page-btn mt-0">
-        <a href="/admin/member-requests" class="btn btn-secondary" id="backBtn"><i data-feather="arrow-left" class="me-2"></i>Back to <%= page_title %></a>
+        <% if(page_title == "Member List") { %>
+            <a href="/admin/members" class="btn btn-secondary" id="backBtn"><i data-feather="arrow-left" class="me-2"></i>Back to <%= page_title %></a>
+        <% } else { %>
+            <a href="/admin/member-requests" class="btn btn-secondary" id="backBtn"><i data-feather="arrow-left" class="me-2"></i>Back to <%= page_title %></a>
+        <% } %>
     </div>
 </div>
  <div class="row">
@@ -159,6 +163,10 @@
                                                     <td><%= family_member['relation'] %></td>
                                                 </tr>
                                             <% }) %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="3">No family member added.</td>
+                                            </tr>
                                         <% } %>
                                     </tbody>
                                 </table>

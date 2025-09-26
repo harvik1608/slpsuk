@@ -43,9 +43,9 @@ exports.load = async (req, res) => {
         });
         const recordsFiltered = searchValue ? users.length : recordsTotal;
 
-        const formattedUsers = users.map(user => {
+        const formattedUsers = users.map((user, index) => {
             return {
-                id: user.id,
+                id: start + index + 1,
                 name: user.name,
                 email: user.email,
                 mobile_no: user.mobile_no,

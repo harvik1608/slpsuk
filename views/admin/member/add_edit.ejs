@@ -5,11 +5,11 @@
 <link rel="stylesheet" href="/assets/plugins/pickr/pickr-themes.css">
 <div class="page-header">
     <div class="page-title">
-        <h4><%= page_title %></h4>
+        <h4>Member List</h4>
         <h6>(<span class='mandadory'>*</span>) indicates required field.</h6>
     </div>
     <div class="page-btn mt-0">
-        <a href="/admin/member-requests" class="btn btn-secondary" id="backBtn"><i data-feather="arrow-left" class="me-2"></i>Back to <%= page_title %></a>
+        <a href="/admin/members" class="btn btn-secondary" id="backBtn"><i data-feather="arrow-left" class="me-2"></i>Back to Member List</a>
     </div>
 </div>
 <form action="<%= member ? '/admin/users/update/' + helpers.encryptId(member.id) : '/admin/users/store' %>" method="POST" enctype="multipart/form-data" id="mainForm">
@@ -17,68 +17,68 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4><%= member['fname'] %> <%= member['mname'] %> <%= member['lname'] %></h4>
+                    <h4>New Member</h4>
                 </div>
                 <div class="card-body profile-body">
                     <div class="row">
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">First Name<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control" name="fname" id="fname" value="<%= member['fname'] %>" disabled />
+                                <input type="text" class="form-control" name="fname" id="fname" value="<%= member ? member['fname'] : '' %>" autofocus />
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Middle Name</label>
-                                <input type="text" class="form-control" name="mname" id="mname" value="<%= member['mname'] %>" />
+                                <input type="text" class="form-control" name="mname" id="mname" value="<%= member ? member['fname'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Last Name<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control" name="lname" id="lname" value="<%= member['lname'] %>" />
+                                <input type="text" class="form-control" name="lname" id="lname" value="<%= member ? member['fname'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">DOB<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control" name="dob" id="dob" value="<%= moment(member['dob']).format("YYYY-MM-DD") %>" />
+                                <input type="text" class="form-control" name="dob" id="dob" value="<%= member ? member['fname'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Mobile No</label>
-                                <input type="number" class="form-control" name="mobile_no" id="mobile_no" value="<%= member['mobile_no'] %>" />
+                                <input type="number" class="form-control" name="mobile_no" id="mobile_no" value="<%= member ? member['fname'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Home / Landline No</label>
-                                <input type="number" class="form-control" name="home_no" id="home_no" value="<%= member['home_no'] %>" />
+                                <input type="number" class="form-control" name="home_no" id="home_no" value="<%= member ? member['fname'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Native Place</label>
-                                <input type="text" class="form-control" name="native_place" id="native_place" value="<%= member['native_place'] %>" />
+                                <input type="text" class="form-control" name="native_place" id="native_place" value="<%= member ? member['fname'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Original Surname</label>
-                                <input type="text" class="form-control" name="real_surname" id="real_surname" value="<%= member['real_surname'] %>" />
+                                <input type="text" class="form-control" name="real_surname" id="real_surname" value="<%= member ? member['fname'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-4 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Post Code</label>
-                                <input type="text" class="form-control" name="postal_code" id="postal_code" value="<%= member['postal_code'] %>" />
+                                <input type="text" class="form-control" name="postal_code" id="postal_code" value="<%= member ? member['fname'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-8 col-sm-12">
                             <div class="mb-3">
                                 <label class="form-label">Address</label>
-                                <input type="text" class="form-control" name="address" id="address" value="<%= member['address'] %>" />
+                                <input type="text" class="form-control" name="address" id="address" value="<%= member ? member['fname'] : '' %>" />
                             </div>
                         </div>
                         <div class="col-lg-2 col-sm-12">
@@ -100,6 +100,14 @@
                             </div>
                         </div>
                     </div>
+                    <div id="add_family_member">
+
+                    </div>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="add_family_member()">Add Family Member</button>
+                    <div class="text-end">
+                        <button type="reset" class="btn btn-primary">Clear</button>
+                        <button type="submit" class="btn btn-secondary">Submit</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -108,5 +116,104 @@
 <script src="/assets/plugins/flatpickr/flatpickr.js"></script>
 <script src="/assets/js/forms-pickers.js"></script>
 <script>
-    var page_title = "<%= page_title %>";
+    var page_title = "Member List";
+    function add_family_member()
+    {
+        var randomNo = rand(10000, 99999);
+
+        let html = "";
+        html = `<div class="row" id="${randomNo}">
+            <hr><div class="col-lg-10 col-sm-10">
+                <h3>Family Member's Details</h3>
+            </div>
+            <div class="col-lg-2 col-sm-2">
+                <p><a class='pull-right btn btn-sm btn-danger' onclick='remove_family_member(${randomNo})'><i class="fas fa-times me-1"></i></a></p><br>
+            </div><hr>
+            <div class="col-lg-3 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Family Member's First Name<span class="text-danger ms-1">*</span></label>
+                    <input type="text" class="form-control" name="fname" id="fname" />
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Family Member's Middle Name</label>
+                    <input type="text" class="form-control" name="mname" id="mname" />
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Family Member's Last Name<span class="text-danger ms-1">*</span></label>
+                    <input type="text" class="form-control" name="lname" id="lname" />
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Family Member's DOB<span class="text-danger ms-1">*</span></label>
+                    <input type="text" class="form-control" name="dob" id="dob" />
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Family Member's Mobile No</label>
+                    <input type="number" class="form-control" name="mobile_no" id="mobile_no" />
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Family Member's Home / Landline No</label>
+                    <input type="number" class="form-control" name="home_no" id="home_no" />
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Family Member's Email</label>
+                    <input type="text" class="form-control" name="family_member_email[]" />
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Family Member's Postal Code</label>
+                    <input type="text" class="form-control" name="family_member_postal_code[]" />
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Relation</label>
+                    <input type="text" class="form-control" name="family_member_relation[]" />
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Family Member's Address</label>
+                    <input type="text" class="form-control" name="family_member_address[]" />
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Marketing</label>
+                    <select class="form-control" name="family_member_is_marketing[]">
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-12">
+                <div class="mb-3">
+                    <label class="form-label">Newsletter</label>
+                    <select class="select form-control" name="family_member_is_newsletter[]">
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </select>
+                </div>
+            </div>`;
+        $("#add_family_member").append(html);
+    }
+    function remove_family_member(no)
+    {
+        $("#"+no).remove();
+    }
+    function rand(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
 </script>

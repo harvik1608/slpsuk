@@ -82,6 +82,14 @@ exports.load = async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 }
+exports.create = async (req, res) => {
+    const member = null;
+    let csrfToken = req.csrfToken();
+    const html = await ejs.renderFile(__dirname+"/../views/admin/member/add_edit.ejs",{csrfToken:csrfToken,member:member,helpers});
+    res.render("include/header",{
+        body: html
+    });
+}
 exports.view = async (req, res) => {
     try {
         const encryptedId = req.params.id;

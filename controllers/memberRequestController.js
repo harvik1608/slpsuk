@@ -87,10 +87,15 @@ exports.view = async (req, res) => {
         if (!member) {
             return res.status(404).send("Member not found");
         }
-        let csrfToken = req.csrfToken();
+        const family_members = await Member.findAll({
+            where: {
+                member_id: memberId
+            },
+            order: [['id', 'DESC']]
+        });
         const html = await ejs.renderFile(__dirname+"/../views/admin/member/view.ejs",{
-            csrfToken:csrfToken,
             member:member,
+            family_members: family_members,
             moment: moment,
             page_title: "Member Request List",
             helpers
