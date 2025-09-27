@@ -1,3 +1,4 @@
+<%- include("../../include/header") %>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
 <div class="page-header">
     <div class="add-item d-flex">
@@ -7,7 +8,7 @@
         </div>
     </div>
     <div class="page-btn">
-        <a href="/admin/users/create" class="btn btn-primary text-white"><i class="ti ti-circle-plus me-1"></i>New Admin</a>
+        <a href="/admin/admins/create" class="btn btn-primary text-white"><i class="ti ti-circle-plus me-1"></i>New Admin</a>
     </div>
 </div>
 <div class="card">
@@ -49,7 +50,7 @@
             "processing": true,       // Show processing indicator
             "serverSide": true,       // Enable server-side mode
             "ajax": {
-                "url": "/admin/load-users",  // Your server-side endpoint
+                "url": "/admin/load-admins",  // Your server-side endpoint
                 "type": "GET",       // Method (POST or GET)
                 "data": function(d) {
                     // You can send extra parameters if needed
@@ -93,3 +94,4 @@
         });
     });
 </script>
+<%- include("../../include/footer") %>

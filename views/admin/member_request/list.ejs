@@ -1,3 +1,4 @@
+<%- include("../../include/header") %>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.css">
 <div class="page-header">
     <div class="add-item d-flex">
@@ -87,19 +88,14 @@
     });
     function approve_member_request(member_id)
     {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         $.confirm({
             title: 'Confirm!',
             content: 'Are you sure to approve this member request?',
             buttons: {
                 confirm: function () {
                     $.ajax({
-                        url: "/admin/member-requests/approve",
-                        type: "POST",
-                        data:{
-                            member_id: member_id,
-                            _csrf: csrfToken
-                        },
+                        url: "/admin/member-requests/approve/"+member_id,
+                        type: "GET",
                         success:function(response) {
                             if(response.success) {
                                 show_toast("Success!",response.message,"success");
@@ -126,18 +122,16 @@
     }
     function reject_member_request(member_id)
     {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         $.confirm({
             title: 'Confirm!',
             content: 'Are you sure to reject this member request?',
             buttons: {
                 confirm: function () {
                     $.ajax({
-                        url: "/admin/member-requests/reject",
-                        type: "POST",
+                        url: "/admin/member-requests/reject/"+member_id,
+                        type: "GET",
                         data:{
-                            member_id: member_id,
-                            _csrf: csrfToken
+                            member_id: member_id
                         },
                         success:function(response) {
                             if(response.success) {
@@ -164,3 +158,4 @@
         });
     }
 </script>
+<%- include("../../include/footer") %>

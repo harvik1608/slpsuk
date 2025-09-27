@@ -6,7 +6,6 @@ const puppeteer = require("puppeteer");
 const crypto = require("crypto");
 const ExcelJS = require("exceljs");
 const csrf = require("csurf");
-const csrfProtection = csrf({ cookie: true });
 const Committee = require("../models/Committee");
 const helpers = require("../helpers/customHelper");
 const { Op } = require('sequelize');
@@ -16,11 +15,7 @@ exports.index = async (req, res) => {
     if (!hasPermission(req.session.user.id, "committee", "list")) {
         return res.status(403).json({ success: false, message: "Permission denied" });
     }
-    const html = await ejs.renderFile(__dirname+"/../views/admin/committee/list.ejs");
-    res.render("include/header",{
-        body: html,
-        hasPermission
-    });
+    res.render("admin/committee/list");
 }
 exports.load = async (req, res) => {
     try {
@@ -81,18 +76,17 @@ exports.load = async (req, res) => {
 exports.create = async (req, res) => {
     const committee = null;
     let csrfToken = req.csrfToken();
-    const html = await ejs.renderFile(__dirname+"/../views/admin/committee/add_edit.ejs",{
-        csrfToken:csrfToken,
+
+    res.render("admin/committee/add_edit", {
+        csrfToken: req.csrfToken(),
         committee,
         helpers
-    });
-    res.render("include/header",{
-        body: html
     });
 }
 exports.store = async (req, res) => {
     try {
         let requestData = (typeof req.body === 'object' && req.body !== null) ? req.body : {};
+        console.log(requestData);
         const requiredParams = ["name","position","email","mobile"];
         const missingParams = await helpers.ParamValidation(requiredParams,requestData);
         if (missingParams.length > 0) {
@@ -111,16 +105,12 @@ exports.store = async (req, res) => {
                     });
                 }
             }
-            let avatarPath = "";
-            // if (req.file) {
-            //     avatarPath = `/uploads/${req.file.filename}`;
-            // }
             const committee = await Committee.create({
                 name: req.body.name,
                 position: req.body.position,
                 mobile: req.body.mobile,
                 email: req.body.email,
-                avatar: avatarPath,
+                avatar: "",
                 isActive: req.body.isActive,
                 createdBy: req.session.user ? req.session.user.id : 0,
                 createdAt: moment().format("YYYY-MM-DD HH:mm:ss")
@@ -143,14 +133,10 @@ exports.edit = async (req, res) => {
         if (!committee) {
             return res.status(404).send("User not found");
         }
-        let csrfToken = req.csrfToken();
-        const html = await ejs.renderFile(__dirname+"/../views/admin/committee/add_edit.ejs",{
-            csrfToken,
+        res.render("admin/committee/add_edit", {
+            csrfToken: req.csrfToken(),
             committee,
             helpers
-        });
-        res.render("include/header",{
-            body: html
         });
     } catch (error) {
         console.log(error);

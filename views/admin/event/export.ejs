@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <title>Event List</title>
+    <style>
+        body {
+            font-family: "Nunito", serif !important;
+            margin: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #777;
+            padding: 8px 12px;
+            text-align: left;
+            font-size: 12px;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+    </style>
+</head>
+<body>
+    <h1>Event List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th width="5%">#</th>
+                <th width="50%">Event Name</th>
+                <th width="10%">Event Date</th>
+                <th width="10%">Event Day</th>
+                <th width="10%">Event Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% rows.forEach((row, index) => { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= row.name %></td>
+                    <td><%= helpers.format_date(row.date) %></td>
+                    <td><%= helpers.day(row.date) %></td>
+                    <td><%= helpers.format_time(row.date+" "+row.time) %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<%- include("../../include/header") %>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs4.min.css" rel="stylesheet">
+<link rel="stylesheet" href="/assets/plugins/flatpickr/flatpickr.css">
+<link rel="stylesheet" href="/assets/plugins/bootstrap-datepicker/bootstrap-datepicker.css">
+<link rel="stylesheet" href="/assets/plugins/daterangepicker/daterangepicker.css">
+<link rel="stylesheet" href="/assets/plugins/jquery-timepicker/jquery-timepicker.css">
+<link rel="stylesheet" href="/assets/plugins/pickr/pickr-themes.css">
+<div class="page-header">
+    <div class="page-title">
+        <h4>Event List</h4>
+        <h6>(<span class='mandadory'>*</span>) indicates required field.</h6>
+    </div>
+</div>
+<form action="<%= event ? '/admin/events/update/' + helpers.encryptId(event.id) : '/admin/events/store' %>" method="POST" enctype="multipart/form-data" id="mainForm">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4><%= event ? 'Edit' : 'New' %> Event</h4>
+                </div>
+                <div class="card-body profile-body">
+                    <div class="row">
+                        <div class="col-lg-8 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Event Name<span class="text-danger ms-1">*</span></label>
+                                <input type="text" class="form-control" name="name" id="name" value="<%= event ? event['name'] : '' %>" autofocus />
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Event Date<span class="text-danger ms-1">*</span></label>
+                                <input type="text" class="form-control" name="date" id="date" value="<%= event ? event['date'] : '' %>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Event Time<span class="text-danger ms-1">*</span></label>
+                                <input type="text" class="form-control" name="time" id="time" value="<%= event ? event['time'] : '' %>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-8 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Event Venue<span class="text-danger ms-1">*</span></label>
+                                <input type="text" class="form-control" name="venue" id="venue" value="<%= event ? event['venue'] : '' %>" />
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="mb-3">
+                                <label class="form-label">Display in Website?</label>
+                                <select class="select" name="display" id="display">
+                                    <option value="N" <%= event && event.display == 'N' ? 'selected' : '' %>>No</option>
+                                    <option value="Y" <%= event && event.display == 'Y' ? 'selected' : '' %>>Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <select class="select" name="isActive" id="isActive">
+                                    <option value="1" <%= event && event.isActive == 1 ? 'selected' : '' %>>Active</option>
+                                    <option value="0" <%= event && event.isActive == 0 ? 'selected' : '' %>>Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-12 col-sm-12">
+                            <div class="mb-3">
+                                <label class="form-label">Event Description</label>
+                                <textarea class="form-control summernote" id="description" name="description"><%= event ? event['description'] : '' %></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="contact_persons">
+                        <% if(contact_persons.length > 0) { %>
+                            <% contact_persons.forEach((contact_person, i) => { %>
+                                <div class="row" id="<%= i %>">
+                                    <div class="col-lg-3 col-sm-12">
+                                        <label class="form-label"><small>Contact Person Name</small></label>
+                                        <input type="text" class="form-control" name="contact_persons[0][name]" value="<%= contact_person.name %>" />
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12">
+                                        <label class="form-label"><small>Contact Person Phone</small></label>
+                                        <input type="text" class="form-control" name="contact_persons[0][phone]" value="<%= contact_person.phone %>" />
+                                    </div>
+                                    <div class="col-lg-3 col-sm-12">
+                                        <label class="form-label"><small>Contact Person Email</small></label>
+                                        <input type="text" class="form-control" name="contact_persons[0][email]" value="<%= contact_person.email %>" />
+                                    </div>
+                                    <div class="col-lg-2 col-sm-2 mt-34">
+                                        <p><a class='btn btn-sm btn-danger' onclick='remove_contact_person(<%= i %>)'><i class="fas fa-times me-1"></i></a></p><br>
+                                    </div>
+                                </div>
+                            <% }) %>    
+                        <% } %>
+                    </div>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="add_contact_person()">Add Contact Person</button>
+                    <div class="text-end">
+                        <a href="/admin/events" class="btn btn-secondary" id="backBtn"><i data-feather="arrow-left" class="me-2"></i>Back</a>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs4.min.js"></script>
+<script src="/assets/plugins/flatpickr/flatpickr.js"></script>
+<script src="/assets/js/forms-pickers.js"></script>
+<script>
+    var page_title = "Event List";
+    var no = -1;
+    $(document).ready(function(){
+        if($('.summernote').length > 0) {
+            $('.summernote').summernote({
+                placeholder: 'Type here...',
+                tabsize: 2,
+                height: "auto"
+            });
+        }
+        const flatpickrDate = document.querySelector('#date');
+        flatpickrDate.flatpickr({
+            monthSelectorType: 'static',
+            minDate: "today"
+        });
+        const flatpickrTime = document.querySelector('#time');
+        flatpickrTime.flatpickr({
+            enableTime: true,
+            noCalendar: true
+        });
+
+
+        $("#mainForm").submit(function(e){
+            e.preventDefault();
+
+            $.ajax({
+                url: $("#mainForm").attr("action"),
+                type: $("#mainForm").attr("method"),
+                data: $(this).serialize(),
+                beforeSend:function(xhr){
+                    xhr.setRequestHeader("csrf-token", $("input[name=_csrf]").val());
+                    $("#mainForm button[type=submit]").html("Submitting...").attr("disabled",true);
+                },
+                success:function(response){
+                    if(response.success) {
+                        show_toast("Success!",response.message,"success");
+                        setTimeout(function(){
+                            window.location.href = $("#backBtn").attr("href");
+                        },3000);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $("#mainForm button[type=submit]").html("Submit").attr("disabled",false);
+                    if (xhr.status === 400) {
+                        const res = xhr.responseJSON;
+                        show_toast("Oops!",res.message,"error");
+                    } else {
+                        show_toast("Oops!","Something went wrong","error");
+                    }
+                }
+            });
+        });
+    });
+    function add_contact_person()
+    {
+        no++;
+        var randomNo = rand(10000, 99999);
+
+        let html = "";
+        html = `<div class="row" id="${randomNo}">
+            <div class="col-lg-3 col-sm-12">
+                <label class="form-label"><small>Contact Person Name</small></label>
+                <input type="text" class="form-control" name="contact_persons[0][name]" />
+            </div>
+            <div class="col-lg-3 col-sm-12">
+                <label class="form-label"><small>Contact Person Phone</small></label>
+                <input type="text" class="form-control" name="contact_persons[0][phone]" />
+            </div>
+            <div class="col-lg-3 col-sm-12">
+                <label class="form-label"><small>Contact Person Email</small></label>
+                <input type="text" class="form-control" name="contact_persons[0][email]" />
+            </div>
+            <div class="col-lg-2 col-sm-2 mt-34">
+                <p><a class='btn btn-sm btn-danger' onclick='remove_contact_person(${randomNo})'><i class="fas fa-times me-1"></i></a></p><br>
+            </div>
+        </div>`;
+        $("#contact_persons").append(html);
+    }
+    function remove_contact_person(no)
+    {
+        $("#"+no).remove();
+    }
+</script>
+<%- include("../../include/footer") %>

@@ -1,0 +1,96 @@
+<%- include("../../include/header") %>
+<div class="page-header">
+    <div class="page-title">
+        <h4>Event Attendance List</h4>
+        <h6>(<span class='mandadory'>*</span>) indicates required field.</h6>
+    </div>
+</div>
+<form action="<%= eventObj ? '/admin/event-attendances/update/' + helpers.encryptId(eventObj.id) : '/admin/event-attendances/store' %>" method="POST" enctype="multipart/form-data" id="mainForm">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4><%= eventObj ? 'Edit' : 'New' %> Event Attendance</h4>
+                </div>
+                <div class="card-body profile-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="mb-3">
+                                <label class="form-label">Event</label>
+                                <select class="select" name="eventId" id="eventId">
+                                    <option value="">Choose Event</option>
+                                    <% if(events.length > 0) { %>
+                                        <% events.forEach((event, i) => { %>
+                                            <option value="<%= event['id'] %>" <%= eventObj && eventObj['eventId'] == event['id'] ? 'selected' : '' %>><%= event['name'] %></option>
+                                        <% }) %>
+                                    <% } %>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">Member</label>
+                                <select class="select" name="memberId" id="memberId">
+                                    <option value="">Choose Member</option>
+                                    <% if(members.length > 0) { %>
+                                        <% members.forEach((member, i) => { %>
+                                            <option value="<%= member['id'] %>" <%= eventObj && eventObj['memberId'] == member['id'] ? 'selected' : '' %>><%= member['fname'] %> <%= member['mname'] %> <%= member['lname'] %></option>
+                                        <% }) %>
+                                    <% } %>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">No. of Family Members</label>
+                                <input type="number" class="form-control" name="members" id="members" min="0" value="<%= eventObj ? eventObj['members'] : '' %>" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end mt-2">
+                        <a href="/admin/event-attendances" class="btn btn-secondary" id="backBtn"><i data-feather="arrow-left" class="me-2"></i>Back</a>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    var page_title = "Event Attendance List";
+    var no = -1;
+    $(document).ready(function(){
+        $("#mainForm").submit(function(e){
+            e.preventDefault();
+
+            $.ajax({
+                url: $("#mainForm").attr("action"),
+                type: $("#mainForm").attr("method"),
+                data: $(this).serialize(),
+                beforeSend:function(xhr){
+                    xhr.setRequestHeader("csrf-token", $("input[name=_csrf]").val());
+                    $("#mainForm button[type=submit]").html("Submitting...").attr("disabled",true);
+                },
+                success:function(response){
+                    if(response.success) {
+                        show_toast("Success!",response.message,"success");
+                        setTimeout(function(){
+                            window.location.href = $("#backBtn").attr("href");
+                        },3000);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $("#mainForm button[type=submit]").html("Submit").attr("disabled",false);
+                    if (xhr.status === 400) {
+                        const res = xhr.responseJSON;
+                        show_toast("Oops!",res.message,"error");
+                    } else {
+                        show_toast("Oops!","Something went wrong","error");
+                    }
+                }
+            });
+        });
+    });
+</script>
+<%- include("../../include/footer") %>

@@ -1,0 +1,80 @@
+                </div>
+            </div>
+        </div>
+        <script src="/assets/plugins/select2/js/select2.min.js"></script>
+        <script src="/assets/js/bootstrap.bundle.min.js"></script>
+        <script src="/assets/js/feather.min.js"></script>
+        <script src="/assets/js/jquery.slimscroll.min.js"></script>
+        <script src="/assets/js/bootstrap.bundle.min.js"></script>
+        <script src="/assets/js/toast.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs4.min.js"></script>
+        <script src="/assets/js/script.js"></script>
+        <script>
+            $(document).ready(function(){
+                if($("#flashMsg").length) {
+                    show_toast($("#flashMsg").text());
+                }
+                if($('.summernote').length > 0) {
+                    $('.summernote').summernote({
+                        placeholder: 'Type here...',
+                        tabsize: 2,
+                        height: "auto"
+                    });
+                }
+                $("#main_menu_list li").each(function(){
+                    if($.trim($(this).text()) == page_title) {
+                        $(this).addClass("active");
+                    }
+                });
+            });
+            function remove_row(deleteUrl)
+            {
+                $.confirm({
+                    title: 'Confirm!',
+                    content: 'Are you sure you want to delete?',
+                    buttons: {
+                        confirm: function () {
+                            $.ajax({
+                                url: deleteUrl,
+                                type: "GET",
+                                success:function(response) {
+                                    if(response.success) {
+                                        show_toast("Success!",response.message,"success");
+                                        setTimeout(function(){
+                                            window.location.reload();
+                                        },3000);
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    if (xhr.status === 400) {
+                                        const res = xhr.responseJSON;
+                                        show_toast("Oops!",res.message,"error");
+                                    } else {
+                                        show_toast("Oops!","Something went wrong","error");
+                                    }
+                                }
+                            });
+                        },
+                        cancel: function () {
+                            
+                        }
+                    }
+                });
+            }
+            function rand(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }
+            function show_toast(title,msg,type,second = 3000)
+            {
+                $.toast({
+                    heading: title,
+                    text: msg,
+                    showHideTransition: 'fade',
+                    icon: type,
+                    position: 'top-right',
+                    hideAfter: second
+                });
+            }
+        </script>
+    </body>
+</html>

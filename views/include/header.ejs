@@ -8,7 +8,6 @@
         <meta name="keywords" content="">
         <meta name="author" content="">
         <meta name="robots" content="">
-        <meta name="csrf-token" content="<%= csrfToken %>">
         <title></title>
         
         <link rel="shortcut icon" type="image/x-icon" href="/assets/img/favicon.png">
@@ -45,6 +44,9 @@
             }
             .pull-right {
                 float: right;
+            }
+            .mt-34 {
+                margin-top: 34px !important;
             }
         </style>
         <script src="/assets/js/jquery-3.7.1.min.js"></script>
@@ -184,7 +186,7 @@
                                 <ul id="main_menu_list">
                                     <% if (hasPermission(currentUser.id, "admin", "list")) { %>
                                         <li class="permission" data-module="admin" data-title="Admin">
-                                            <a href="/admin/users">
+                                            <a href="/admin/admins">
                                                 <i data-feather="box"></i><span>Admin List</span>
                                             </a>
                                         </li>
@@ -225,17 +227,17 @@
                                 <h6 class="submenu-hdr">Event</h6>
                                 <ul id="main_menu_list">
                                     <li class="permission" data-module="event" data-title="Event">
-                                        <a href="admin/quote/list.php">
+                                        <a href="/admin/events">
                                             <i data-feather="box"></i><span>Event List</span>
                                         </a>
                                     </li>
                                     <li class="permission" data-module="event_attendance" data-title="Event Attendance">
-                                        <a href="admin/quote/list.php">
+                                        <a href="/admin/event-attendances">
                                             <i data-feather="box"></i><span>Event Attendance List</span>
                                         </a>
                                     </li>
                                     <li class="permission" data-module="upcoming_event" data-title="Upcoming Event">
-                                        <a href="admin/quote/list.php">
+                                        <a href="/admin/upcoming-events">
                                             <i data-feather="box"></i><span>Upcoming Event List</span>
                                         </a>
                                     </li>
@@ -250,17 +252,17 @@
                                         </a>
                                     </li>
                                     <li class="permission" data-module="announcement" data-title="Announcement">
-                                        <a href="admin/quote/list.php">
+                                        <a href="/admin/announcements">
                                             <i data-feather="box"></i><span>Announcement List</span>
                                         </a>
                                     </li>
                                     <li class="permission" data-module="newsletter" data-title="Newsletter">
-                                        <a href="admin/quote/list.php">
+                                        <a href="admin/newsletters">
                                             <i data-feather="box"></i><span>Newsletter List</span>
                                         </a>
                                     </li>
                                     <li class="permission" data-module="policy" data-title="Policy">
-                                        <a href="admin/quote/list.php">
+                                        <a href="/admin/policies">
                                             <i data-feather="box"></i><span>Policy List</span>
                                         </a>
                                     </li>
@@ -292,81 +294,4 @@
             </div>
             <div class="page-wrapper">
                 <div class="content">
-                    <%- body %>
-                </div>
-            </div>
-        </div>
-        <script src="/assets/plugins/select2/js/select2.min.js"></script>
-        <script src="/assets/js/bootstrap.bundle.min.js"></script>
-        <script src="/assets/js/feather.min.js"></script>
-        <script src="/assets/js/jquery.slimscroll.min.js"></script>
-        <script src="/assets/js/bootstrap.bundle.min.js"></script>
-        <script src="/assets/js/toast.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs4.min.js"></script>
-        <script src="/assets/js/script.js"></script>
-        <script>
-            $(document).ready(function(){
-                if($("#flashMsg").length) {
-                    show_toast($("#flashMsg").text());
-                }
-                if($('.summernote').length > 0) {
-                    $('.summernote').summernote({
-                        placeholder: 'Type here...',
-                        tabsize: 2,
-                        height: "auto"
-                    });
-                }
-                $("#main_menu_list li").each(function(){
-                    if($.trim($(this).text()) == page_title) {
-                        $(this).addClass("active");
-                    }
-                });
-            });
-            function remove_row(deleteUrl)
-            {
-                $.confirm({
-                    title: 'Confirm!',
-                    content: 'Are you sure you want to delete?',
-                    buttons: {
-                        confirm: function () {
-                            $.ajax({
-                                url: deleteUrl,
-                                type: "GET",
-                                success:function(response) {
-                                    if(response.success) {
-                                        show_toast("Success!",response.message,"success");
-                                        setTimeout(function(){
-                                            window.location.reload();
-                                        },3000);
-                                    }
-                                },
-                                error: function(xhr, status, error) {
-                                    if (xhr.status === 400) {
-                                        const res = xhr.responseJSON;
-                                        show_toast("Oops!",res.message,"error");
-                                    } else {
-                                        show_toast("Oops!","Something went wrong","error");
-                                    }
-                                }
-                            });
-                        },
-                        cancel: function () {
-                            
-                        }
-                    }
-                });
-            }
-            function show_toast(title,msg,type,second = 3000)
-            {
-                $.toast({
-                    heading: title,
-                    text: msg,
-                    showHideTransition: 'fade',
-                    icon: type,
-                    position: 'top-right',
-                    hideAfter: second
-                });
-            }
-        </script>
-    </body>
-</html>
+                

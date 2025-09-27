@@ -41,4 +41,12 @@ module.exports = {
     format_date: (date) => {
         return moment(date).format("DD MMM, YYYY");
     },
+
+    day: (date) => {
+        return moment(date).format("dddd");
+    },
+
+    format_time: (time) => {
+        return moment(time).format("hh:mm A");
+    },
 };

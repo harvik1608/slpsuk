@@ -12,11 +12,12 @@ exports.index = async (req, res) => {
     if (!hasPermission(req.session.user.id, "admin", "list")) {
         return res.status(403).json({ success: false, message: "Permission denied" });
     }
-    const html = await ejs.renderFile(__dirname+"/../views/admin/member_request/list.ejs");
-    res.render("include/header",{
-        body: html,
-        hasPermission
-    });
+    res.render("admin/member_request/list");
+    // const html = await ejs.renderFile(__dirname+"/../views/admin/member_request/list.ejs");
+    // res.render("include/header",{
+    //     body: html,
+    //     hasPermission
+    // });
 }
 exports.load = async (req, res) => {
     try {
@@ -93,15 +94,12 @@ exports.view = async (req, res) => {
             },
             order: [['id', 'DESC']]
         });
-        const html = await ejs.renderFile(__dirname+"/../views/admin/member/view.ejs",{
-            member:member,
-            family_members: family_members,
-            moment: moment,
+        res.render("admin/member/view",{
+            member,
+            family_members,
+            moment,
             page_title: "Member Request List",
             helpers
-        });
-        res.render("include/header",{
-            body: html
         });
     } catch (error) {
         console.log(error);
@@ -110,7 +108,7 @@ exports.view = async (req, res) => {
 }
 exports.approve = async (req, res) => {
     try {
-        const encryptedId = req.body.member_id;
+        const encryptedId = req.params.id;
         const memberId = parseInt(helpers.decryptId(encryptedId));
         
         const member = await Member.findByPk(memberId);
@@ -126,7 +124,7 @@ exports.approve = async (req, res) => {
 }
 exports.reject = async (req, res) => {
     try {
-        const encryptedId = req.body.member_id;
+        const encryptedId = req.params.id;
         const memberId = parseInt(helpers.decryptId(encryptedId));
         
         const member = await Member.findByPk(memberId);

@@ -3,20 +3,20 @@
 <div class="page-header">
     <div class="add-item d-flex">
         <div class="page-title">
-            <h4 class="fw-bold">Committee List</h4>
+            <h4 class="fw-bold">Announcement List</h4>
             <h6></h6>
         </div>
     </div>
     <ul class="table-top-head">
         <li>
-            <a href="/admin/committees/export-pdf" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Export to PDF" data-bs-original-title="Export to PDF"><img src="/assets/img/icons/pdf.svg" alt="img"></a>
+            <a href="/admin/announcements/export-pdf" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Export to PDF" data-bs-original-title="Export to PDF"><img src="/assets/img/icons/pdf.svg" alt="img"></a>
         </li>
         <li>
-            <a href="/admin/committees/export-excel" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Export to Excel" data-bs-original-title="Export to Excel"><img src="/assets/img/icons/excel.svg" alt="img"></a>
+            <a href="/admin/announcements/export-excel" data-bs-toggle="tooltip" data-bs-placement="bottom" aria-label="Export to Excel" data-bs-original-title="Export to Excel"><img src="/assets/img/icons/excel.svg" alt="img"></a>
         </li>
     </ul>
     <div class="page-btn">
-        <a href="/admin/committees/create" class="btn btn-primary text-white"><i class="ti ti-circle-plus me-1"></i>New Committee</a>
+        <a href="/admin/announcements/create" class="btn btn-primary text-white"><i class="ti ti-circle-plus me-1"></i>New Announcement</a>
     </div>
 </div>
 <div class="card">
@@ -33,10 +33,7 @@
                 <thead class="thead-light">
                     <tr>
                         <th width="5%">#</th>
-                        <th width="20%">Name</th>
-                        <th width="20%">Position</th>
-                        <th width="20%">Email</th>
-                        <th width="15%">Mobile No.</th>
+                        <th width="75%">Name</th>
                         <th width="10%">Status</th>
                         <th width="10%" class="no-sort"></th>
                     </tr>
@@ -52,13 +49,13 @@
 <script src="/assets/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.4/jquery-confirm.min.js"></script>
 <script>
-    var page_title = "Committee List";
+    var page_title = "Announcement List";
     $(document).ready(function(){
         $('#user-tbl').DataTable({
             "processing": true,       // Show processing indicator
             "serverSide": true,       // Enable server-side mode
             "ajax": {
-                "url": "/admin/load-committees",  // Your server-side endpoint
+                "url": "/admin/load-announcements",  // Your server-side endpoint
                 "type": "GET",       // Method (POST or GET)
                 "data": function(d) {
                     // You can send extra parameters if needed
@@ -71,9 +68,6 @@
             "columns": [
                 { data: 'id' },
                 { data: 'name' },
-                { data: 'position' },
-                { data: 'email' },
-                { data: 'mobile' },
                 { data: 'status' },
                 { 
                     data: 'actions', 

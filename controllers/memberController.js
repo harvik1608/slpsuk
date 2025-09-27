@@ -14,10 +14,9 @@ exports.index = async (req, res) => {
     if (!hasPermission(req.session.user.id, "member", "list")) {
         return res.status(403).json({ success: false, message: "Permission denied" });
     }
-    const html = await ejs.renderFile(__dirname+"/../views/admin/member/list.ejs");
-    res.render("include/header",{
-        body: html,
-        hasPermission
+    res.render("admin/member/list", {
+        csrfToken: req.csrfToken(),
+        helpers
     });
 }
 exports.load = async (req, res) => {
@@ -87,15 +86,12 @@ exports.load = async (req, res) => {
 exports.create = async (req, res) => {
     const member = null;
     const family_members = [];
-    let csrfToken = req.csrfToken();
-    const html = await ejs.renderFile(__dirname+"/../views/admin/member/add_edit.ejs",{
-        csrfToken:csrfToken,
+    
+    res.render("admin/member/add_edit", {
+        csrfToken: req.csrfToken(),
         member,
         family_members,
         helpers
-    });
-    res.render("include/header",{
-        body: html
     });
 }
 exports.store = async (req, res) => {
@@ -146,32 +142,37 @@ exports.store = async (req, res) => {
                 createdAt: moment().format("YYYY-MM-DD HH:mm:ss")
             });
             const memberId = member.id;
-            if(req.body.family_member_fname.length > 0) {
-                const family_members = [];
-                for (let i = 0; i < req.body.family_member_fname.length; i++) {
+            const inputMembers = req.body.family_members;
+            if(inputMembers && inputMembers.length > 0) {
+                var family_members = [];
+                for (let i = 0; i < inputMembers.length; i++) {
                     family_members.push({
                         member_id: memberId,
-                        fname: req.body.family_member_fname[i],
-                        mname: req.body.family_member_mname[i],
-                        lname: req.body.family_member_lname[i],
-                        dob: req.body.family_member_dob[i],
-                        mobile_no: req.body.family_member_mobile_no[i],
-                        home_no: req.body.family_member_home_no[i],
-                        email: req.body.family_member_email[i],
-                        postal_code: req.body.family_member_postal_code[i],
-                        relation: req.body.family_member_relation[i],
-                        address: req.body.family_member_address[i],
-                        is_marketing: req.body.family_member_is_marketing[i],
-                        is_newsletter: req.body.family_member_is_newsletter[i],
+                        fname: inputMembers[i].fname,
+                        mname: inputMembers[i].mname,
+                        lname: inputMembers[i].lname,
+                        dob: inputMembers[i].dob,
+                        mobile_no: inputMembers[i].mobile_no,
+                        home_no: inputMembers[i].home_no,
+                        email: inputMembers[i].email,
+                        postal_code: inputMembers[i].postal_code,
+                        relation: inputMembers[i].relation,
+                        address: inputMembers[i].address,
+                        is_marketing: inputMembers[i].is_marketing,
+                        is_newsletter: inputMembers[i].is_newsletter,
                         createdBy: req.session.user ? req.session.user.id : 0,
                         createdAt: moment().format("YYYY-MM-DD HH:mm:ss")
                     });
                 }
                 await Member.bulkCreate(family_members);
-                const member = await Member.findByPk(memberId);
-                await member.update({family_member: family_members.length});
+                const remainingFamilyMembersCount = await Member.count({
+                    where: { member_id: memberId }  // or whatever column links to the main member
+                });
+                const family_member = await Member.findByPk(memberId);
+                await family_member.update({ family_member: remainingFamilyMembersCount });
             }
-            res.status(200).json({success: true, message: "Member created successfully.", data: member});
+            const memberInfo = await Member.findByPk(memberId);
+            res.status(200).json({success: true, message: "Member created successfully.", data: memberInfo});
         }
     } catch (error) {
         console.error(error);
@@ -185,20 +186,16 @@ exports.edit = async (req, res) => {
 
         const member = await Member.findByPk(memberId);
         if (!member) {
-            return res.status(404).send("User not found");
+            return res.status(404).send("Member not found");
         }
         const family_members = await Member.findAll({
             where: {member_id: memberId}
         });
-        let csrfToken = req.csrfToken();
-        const html = await ejs.renderFile(__dirname+"/../views/admin/member/add_edit.ejs",{
-            csrfToken,
+        res.render("admin/member/add_edit", {
+            csrfToken: req.csrfToken(),
             member,
             family_members,
             helpers
-        });
-        res.render("include/header",{
-            body: html
         });
     } catch (error) {
         console.log(error);
@@ -366,15 +363,12 @@ exports.view = async (req, res) => {
             },
             order: [['id', 'DESC']]
         });
-        const html = await ejs.renderFile(__dirname+"/../views/admin/member/view.ejs",{
-            member:member,
-            family_members: family_members,
-            moment: moment,
+        res.render("admin/member/view", {
+            member,
+            family_members,
+            moment,
             page_title: "Member List",
             helpers
-        });
-        res.render("include/header",{
-            body: html
         });
     } catch (error) {
         console.log(error);

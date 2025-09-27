@@ -1,56 +1,54 @@
 <%- include("../../include/header") %>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs4.min.css" rel="stylesheet">
 <div class="page-header">
     <div class="page-title">
-        <h4>Committee List</h4>
+        <h4>Announcement List</h4>
         <h6>(<span class='mandadory'>*</span>) indicates required field.</h6>
     </div>
 </div>
-<form action="<%= committee ? '/admin/committees/update/' + helpers.encryptId(committee.id) : '/admin/committees/store' %>" method="POST" enctype="multipart/form-data" id="mainForm">
+<form action="<%= announcement ? '/admin/eannouncements/update/' + helpers.encryptId(announcement.id) : '/admin/announcements/store' %>" method="POST" enctype="multipart/form-data" id="mainForm">
     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
     <div class="row">
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4><%= committee ? 'Edit' : 'New' %> Committee</h4>
+                    <h4><%= announcement ? 'Edit' : 'New' %> Announcement</h4>
                 </div>
                 <div class="card-body profile-body">
                     <div class="row">
-                        <div class="col-lg-4 col-sm-12">
+                        <div class="col-lg-12">
                             <div class="mb-3">
                                 <label class="form-label">Name<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control" name="name" id="name" value="<%= committee ? committee['name'] : '' %>" autofocus />
+                                <input type="text" class="form-control" name="name" id="name" value="<%= announcement ? announcement['name'] : '' %>" autofocus />
                             </div>
                         </div>
-                        <div class="col-lg-4 col-sm-12">
+                        <div class="col-lg-12">
                             <div class="mb-3">
-                                <label class="form-label">Position<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control" name="position" id="position" value="<%= committee ? committee['position'] : '' %>" />
+                                <label class="form-label">Message</label>
+                                <textarea class="form-control summernote" name="message" id="message"><%= announcement ? announcement['message'] : '' %></textarea>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-sm-12">
+                        <div class="col-lg-6">
                             <div class="mb-3">
-                                <label class="form-label">Mobile No<span class="text-danger ms-1">*</span></label>
-                                <input type="number" class="form-control" name="mobile" id="mobile" value="<%= committee ? committee['mobile'] : '' %>" />
+                                <label class="form-label">Display on Wesbite?</label>
+                                <select class="select" name="isDisplayFrontend" id="isDisplayFrontend">
+                                    <option value="1" <%= announcement && announcement.isDisplayFrontend == 1 ? 'selected' : '' %>>Yes</option>
+                                    <option value="0" <%= announcement && announcement.isDisplayFrontend == 0 ? 'selected' : '' %>>No</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-sm-12">
-                            <div class="mb-3">
-                                <label class="form-label">Email<span class="text-danger ms-1">*</span></label>
-                                <input type="text" class="form-control" name="email" id="email" value="<%= committee ? committee['email'] : '' %>" />
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                             <div class="mb-3">
                                 <label class="form-label">Status</label>
                                 <select class="select" name="isActive" id="isActive">
-                                    <option value="1" <%= committee && committee.isActive == 1 ? 'selected' : '' %>>Active</option>
-                                    <option value="0" <%= committee && committee.isActive == 0 ? 'selected' : '' %>>Inactive</option>
+                                    <option value="1" <%= announcement && announcement.isActive == 1 ? 'selected' : '' %>>Active</option>
+                                    <option value="0" <%= announcement && announcement.isActive == 0 ? 'selected' : '' %>>Inactive</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <div class="text-end">
-                        <a href="/admin/committees" class="btn btn-secondary" id="backBtn"><i data-feather="arrow-left" class="me-2"></i>Back</a>
+                    <div class="text-end mt-2">
+                        <a href="/admin/announcements" class="btn btn-secondary" id="backBtn"><i data-feather="arrow-left" class="me-2"></i>Back</a>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </div>
@@ -58,12 +56,18 @@
         </div>
     </div>
 </form>
-<script src="/assets/plugins/flatpickr/flatpickr.js"></script>
-<script src="/assets/js/forms-pickers.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs4.min.js"></script>
 <script>
-    var page_title = "Committee List";
+    var page_title = "Announcement List";
     var no = -1;
     $(document).ready(function(){
+        if($('.summernote').length > 0) {
+            $('.summernote').summernote({
+                placeholder: 'Type here...',
+                tabsize: 2,
+                height: "auto"
+            });
+        }
         $("#mainForm").submit(function(e){
             e.preventDefault();
 

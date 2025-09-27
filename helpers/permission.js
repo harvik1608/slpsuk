@@ -2,9 +2,9 @@ const Admin = require("../models/Admin");
 
 const hasPermission = async (adminId, moduleName, action) => {
     try {
-        console.log("adminId"+adminId);
+        // console.log("adminId"+adminId);
         const admin = await Admin.findByPk(adminId);
-        console.log(admin);
+        // console.log(admin);
 
         if (!admin) return false;
 

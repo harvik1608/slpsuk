@@ -14,11 +14,7 @@ exports.index = async (req, res) => {
     if (!hasPermission(req.session.user.id, "family_member", "list")) {
         return res.status(403).json({ success: false, message: "Permission denied" });
     }
-    const html = await ejs.renderFile(__dirname+"/../views/admin/family_member/list.ejs");
-    res.render("include/header",{
-        body: html,
-        hasPermission
-    });
+    res.render("admin/family_member/list");
 }
 exports.load = async (req, res) => {
     try {
